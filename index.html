@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Kos Management & Power Control</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter & Orbitron for Tech/Clock Feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes glowPulse {
+            0%, 100% {
+                text-shadow: 0 0 12px rgba(99, 102, 241, 0.6), 0 0 25px rgba(99, 102, 241, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 25px rgba(99, 102, 241, 0.9), 0 0 40px rgba(99, 102, 241, 0.6);
+                transform: scale(1.02);
+            }
+        }
+        .glowing-pulsing-title {
+            animation: glowPulse 3s infinite ease-in-out;
+        }
+        
+        /* Smooth transitions */
+        .transition-all-300 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Hide scrollbars but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-all-300">
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full"></div>
+
+    <div id="app-wrapper" class="min-h-screen flex flex-col">
+        
+        <!-- HEADER / NAVIGATION (Always visible once logged in) -->
+        <header id="main-header" class="hidden border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-all-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                
+                <!-- Brand Title with glow effect & Connection Status -->
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-brand-600 rounded-xl text-white shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-house-signal text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight glowing-pulsing-title bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                                KOS SMART POWER
+                            </h1>
+                            <!-- Connection Badge integrated in header -->
+                            <span id="connection-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-850 dark:text-slate-400">Offline Mock</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-widest uppercase">IoT Dashboard</p>
+                    </div>
+                </div>
+
+                <!-- Live Clock, Theme & Profile Widget -->
+                <div class="flex items-center gap-3 sm:gap-5">
+                    <!-- Live Time & Date Desk -->
+                    <div class="hidden md:flex flex-col text-right">
+                        <span id="header-date" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sabtu, 27 Juni 2026</span>
+                        <span id="header-clock" class="text-sm font-bold font-tech text-brand-600 dark:text-brand-400">21:13:00 WIB</span>
+                    </div>
+
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all-300" aria-label="Toggle Theme">
+                        <i id="theme-icon" class="fa-solid fa-sun"></i>
+                    </button>
+
+                    <!-- Exit App / Log out -->
+                    <button id="logout-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 transition-all-300 font-semibold text-xs sm:text-sm">
+                        <i class="fa-solid fa-power-off"></i>
+                        <span class="hidden sm:inline">Keluar</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div id="mobile-clock-banner" class="hidden md:hidden bg-slate-100 dark:bg-slate-900 px-4 py-2 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs">
+            <span id="mobile-date" class="font-medium text-slate-600 dark:text-slate-400">27 Juni 2026</span>
+            <span id="mobile-clock" class="font-bold font-tech text-brand-500 dark:text-brand-400">21:13:00 WIB</span>
+        </div>
+
+        <!-- MAIN INTERFACE BODY -->
+        <main class="flex-grow flex flex-col">
+
+            <!-- LOGIN ACCESS SCREEN -->
+            <div id="login-container" class="flex-grow flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-all-300">
+                <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 transition-all-300">
+                    
+                    <!-- Decorative Top Area -->
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center p-4 bg-brand-500/10 rounded-2xl text-brand-500 mb-4 ring-4 ring-brand-500/5">
+                            <i class="fa-solid fa-shield-halved text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight glowing-pulsing-title bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                            KOS SMART POWER
+                        </h2>
+                        <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm sm:text-base">Masuk untuk mengelola kamar & kontrol daya Sonoff</p>
+                    </div>
+
+                    <!-- Login Error Message Container -->
+                    <div id="login-error" class="hidden mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-600 dark:text-red-400 text-xs sm:text-sm">
+                        <i class="fa-solid fa-triangle-exclamation text-base shrink-0"></i>
+                        <span id="login-error-text">Nama pengguna atau sandi salah!</span>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="space-y-5">
+                        <div>
+                            <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username Administrator</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <input type="text" id="username" required class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="admin">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">PIN / Kata Sandi Akses</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                                <!-- Password Input with Eagle Eye Toggle Button -->
+                                <input type="password" id="password" required class="w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="••••••••">
+                                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-brand-500 transition-colors focus:outline-none" title="Mata Elang - Intip Kata Sandi">
+                                    <i id="password-toggle-icon" class="fa-solid fa-eye text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" id="login-submit-btn" class="w-full py-3.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 active:scale-[0.98] transition-all-300 text-sm flex items-center justify-center gap-2">
+                                <span id="login-btn-text">Akses Dashboard</span>
+                                <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Premium Styled Credits Tooltip -->
+                    <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800/60 text-center">
+                        <div class="inline-block px-3.5 py-1.5 bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/10 dark:border-brand-500/20 rounded-xl text-[11px] text-slate-500 dark:text-slate-400">
+                            <span class="font-medium text-slate-400">Powered By</span> 
+                            <span class="font-extrabold tracking-wide bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent ml-0.5">Hay Studio</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MAIN DASHBOARD -->
+            <div id="dashboard-container" class="hidden flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+                
+                <!-- Action Row -->
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold tracking-tight">Kamar & Kontrol Relay Daya</h2>
+                        <p class="text-xs text-slate-400 mt-1">Gunakan panel ini untuk mengaktifkan/mematikan saklar listrik per kamar secara remote.</p>
+                    </div>
+                    <button id="open-add-room-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-all-300 flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Tambah Kamar</span>
+                    </button>
+                </div>
+
+                <!-- OVERVIEW VIEW -->
+                <div id="tab-overview" class="space-y-8">
+
+                    <!-- Top KPI Summary Cards -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Card: Total Kamar -->
+                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-blue-500/10 rounded-xl text-blue-500 shrink-0">
+                                <i class="fa-solid fa-door-open text-xl sm:text-2xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Total Kamar</p>
+                                <h3 id="stat-total-rooms" class="text-lg sm:text-2xl font-black mt-0.5">0</h3>
+                            </div>
+                        </div>
+
+                        <!-- Card: Terisi -->
+                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-brand-500/10 rounded-xl text-brand-500 shrink-0">
+                                <i class="fa-solid fa-user-check text-xl sm:text-2xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Terisi</p>
+                                <h3 id="stat-occupied-rooms" class="text-lg sm:text-2xl font-black mt-0.5 text-brand-600 dark:text-brand-400">0</h3>
+                            </div>
+                        </div>
+
+                        <!-- Card: Listrik Aktif -->
+                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-500 shrink-0">
+                                <i class="fa-solid fa-plug-circle-check text-xl sm:text-2xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Daya Aktif</p>
+                                <h3 id="stat-power-active" class="text-lg sm:text-2xl font-black mt-0.5 text-emerald-600 dark:text-emerald-400">0</h3>
+                            </div>
+                        </div>
+
+                        <!-- Card: Tunggakan Tagihan -->
+                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
+                            <div class="p-3 bg-red-500/10 rounded-xl text-red-500 shrink-0">
+                                <i class="fa-solid fa-circle-exclamation text-xl sm:text-2xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Tunggakan</p>
+                                <h3 id="stat-arrears-count" class="text-lg sm:text-2xl font-black mt-0.5 text-red-500">0 Kamar</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informational Banner -->
+                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex gap-3">
+                            <div class="p-2 bg-amber-500/20 text-amber-500 rounded-xl shrink-0 mt-0.5">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-amber-700 dark:text-amber-400">Sistem Proteksi Tunggakan (Sonoff Automation)</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Jika status diubah ke "Tunggakan", sistem IoT akan memutus daya secara otomatis via API Sonoff.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Integrasi Sonoff Aktif
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Room Grid & Search Filter -->
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <h3 class="text-lg font-bold">Daftar Kamar Aktif</h3>
+                            
+                            <!-- Filter Group -->
+                            <div class="flex items-center gap-2 max-w-sm w-full sm:w-auto">
+                                <div class="relative w-full">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+                                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                                    </span>
+                                    <input id="search-room" type="text" class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:ring-1 focus:ring-brand-500 outline-none" placeholder="Cari kamar / nama...">
+                                </div>
+                                <select id="filter-status" class="py-2 px-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs outline-none focus:ring-1 focus:ring-brand-500">
+                                    <option value="all">Semua Kamar</option>
+                                    <option value="lunas">Lunas</option>
+                                    <option value="tunggakan">Tunggakan</option>
+                                    <option value="kosong">Kosong</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- GRID OF ROOMS -->
+                        <div id="rooms-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Injected dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- IoT Simulation Live Logs Console -->
+                    <div class="bg-slate-900 text-slate-200 rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+                        <div class="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping"></span>
+                                <h4 class="font-bold text-xs font-tech uppercase tracking-wider text-slate-400">Sonoff IoT / API Trigger Logs</h4>
+                            </div>
+                            <button id="clear-logs-btn" class="text-[11px] font-bold text-slate-500 hover:text-white transition-colors uppercase">
+                                Bersihkan Log
+                            </button>
+                        </div>
+                        <div id="logs-console" class="p-4 font-mono text-[11px] leading-relaxed h-44 overflow-y-auto no-scrollbar space-y-1.5 bg-black/40">
+                            <div class="text-slate-500">// Menunggu aksi kontrol daya Sonoff...</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-6 transition-all-300">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-xs text-slate-400">© 2026 Smart Kos Power Management System. Powered By Hay Studio.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ROOM MODAL FORM -->
+    <div id="room-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between">
+                <h3 id="modal-title" class="text-lg font-bold">Tambah Kamar Baru</h3>
+                <button id="close-modal-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="room-form" class="space-y-4">
+                <input type="hidden" id="modal-room-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="modal-no-kamar" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">No Kamar</label>
+                        <input type="text" id="modal-no-kamar" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Contoh: 101">
+                    </div>
+                    <div>
+                        <label for="modal-device-id" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">ID Device Sonoff</label>
+                        <input type="text" id="modal-device-id" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="SONOFF_101">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modal-nama" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Nama Penyewa</label>
+                    <input type="text" id="modal-nama" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Masukkan nama penyewa (biarkan kosong jika kosong)">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="modal-tarif" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Tarif Kamar (Rp)</label>
+                        <input type="number" id="modal-tarif" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="1200000">
+                    </div>
+                    <div>
+                        <label for="modal-jatuh-tempo" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Jatuh Tempo</label>
+                        <input type="date" id="modal-jatuh-tempo" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modal-status" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Status Pembayaran</label>
+                    <select id="modal-status" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
+                        <option value="Lunas">Lunas</option>
+                        <option value="Tunggakan">Tunggakan (Memutus Otomatis Aliran Listrik)</option>
+                        <option value="Kosong">Kosong (Tidak Berpenghuni)</option>
+                    </select>
+                </div>
+
+                <!-- Sonoff Smart relay status indicator -->
+                <div id="modal-power-badge-container" class="p-3.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-bold text-slate-400">Power Relay Status:</span>
+                    <span id="modal-power-badge" class="px-2.5 py-1 rounded-full font-bold bg-slate-200 text-slate-600">OFF</span>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <button type="button" id="cancel-modal-btn" class="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-brand-500/10 transition-colors">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="delete-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-6 transform scale-95 transition-transform duration-300">
+            <div class="text-center space-y-3">
+                <div class="inline-flex p-3 bg-red-500/10 text-red-500 rounded-2xl">
+                    <i class="fa-solid fa-triangle-exclamation text-xl animate-bounce"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Hapus Kamar Kos?</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Apakah Anda yakin ingin menghapus <span id="delete-room-name" class="font-bold text-brand-600 dark:text-brand-400"></span>? Semua data penyewaan akan terhapus secara permanen.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="cancel-delete-btn" class="w-1/2 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs text-slate-700 dark:text-slate-300 transition-colors">
+                    Batal
+                </button>
+                <button id="confirm-delete-btn" class="w-1/2 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-red-500/20 active:scale-[0.98] transition-colors">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // =================================================================
+        // ⚙️ KONFIGURASI INTEGRASI DATABASE LIVE (GOOGLE APPS SCRIPT)
+        // =================================================================
+        // URL Web App dari deployment Google Apps Script Anda (HARDCODED)
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx3AU-am5RlQ6Iqh9E4qoymREX_nH5NOzkYyNqchWg36px0TiqPNW1LQbZZzMVZIW4/exec';
+
+        // MOCK STATE FOR OFFLINE DEMO (Hanya digunakan jika sambungan internet terputus)
+        let roomsData = [
+            { roomId: '101', noKamar: '101', namaPenyewa: 'Budi Santoso', tarif: 1200000, tanggalJatuhTempo: '2026-07-10', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_101' },
+            { roomId: '102', noKamar: '102', namaPenyewa: 'Dewi Lestari', tarif: 1500000, tanggalJatuhTempo: '2026-06-25', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_102' },
+            { roomId: '103', noKamar: '103', namaPenyewa: 'Andi Wijaya', tarif: 1200000, tanggalJatuhTempo: '2026-07-01', statusBayar: 'Kosong', powerStatus: 'OFF', deviceId: 'SONOFF_103' },
+            { roomId: '104', noKamar: '104', namaPenyewa: 'Faisal Akbar', tarif: 1300000, tanggalJatuhTempo: '2026-07-15', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_104' },
+            { roomId: '105', noKamar: '105', namaPenyewa: 'Siti Rahma', tarif: 1250000, tanggalJatuhTempo: '2026-06-20', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_105' }
+        ];
+
+        let currentUser = null;
+
+        // Validating integration variables directly from code configuration
+        const activeGasUrl = (GAS_URL && GAS_URL !== 'TEMPELKAN_GAS_URL_ANDA_DI_SINI') ? GAS_URL.trim() : '';
+        const isLiveMode = activeGasUrl !== '';
+
+        // Custom API Router (Handles live Google Sheets or fallback to Offline Mock variables)
+        async function callBackend(action, data = {}) {
+            if (!isLiveMode || !activeGasUrl) {
+                return handleMockAction(action, data);
+            }
+
+            try {
+                const payload = { action, ...data };
+                // Using text/plain is crucial to prevent preflight OPTIONS checks in Google Web Apps
+                const response = await fetch(activeGasUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                writeLog('LIVE_API_ERROR', `Koneksi gagal ke Sheets. Pesan: ${error.message}`);
+                showToast('Koneksi Gagal', 'Gagal memproses data live dari Sheets. Menggunakan mode Simulasi.', 'error');
+                console.error(error);
+                return handleMockAction(action, data);
+            }
+        }
+
+        // Offline Fallback Handler
+        function handleMockAction(action, data) {
+            writeLog('SIMULASI_MOCK', `Melakukan aksi lokal offline: ${action}`);
+            if (action === 'checkLogin') {
+                if (data.username === 'admin' && data.password === 'admin123') {
+                    return { success: true, role: 'Administrator' };
+                }
+                return { success: false, message: 'ID atau Sandi tidak sah' };
+            }
+            if (action === 'getKamarData') {
+                return { success: true, rooms: roomsData };
+            }
+            if (action === 'saveKamar') {
+                const r = data.room;
+                const idx = roomsData.findIndex(item => item.roomId === r.roomId);
+                if (idx !== -1) {
+                    roomsData[idx] = r;
+                } else {
+                    roomsData.push(r);
+                }
+                return { success: true };
+            }
+            if (action === 'togglePower') {
+                const room = roomsData.find(item => item.roomId === data.roomId);
+                if (room) {
+                    if (room.statusBayar === 'Tunggakan' && data.powerStatus === 'ON') {
+                        return { success: false, message: 'Dilarang menyalakan daya! Penyewa memiliki tunggakan.' };
+                    }
+                    room.powerStatus = data.powerStatus;
+                    return { success: true, message: `Status diset ${data.powerStatus}` };
+                }
+                return { success: false, message: 'Kamar tidak ada' };
+            }
+            if (action === 'deleteKamar') {
+                roomsData = roomsData.filter(item => item.roomId !== data.roomId);
+                return { success: true };
+            }
+            return { success: false };
+        }
+
+        // Update top-header status badge dynamically based on configuration
+        function updateConnectionStatusUI() {
+            const statusBadge = document.getElementById('connection-status-badge');
+            if (isLiveMode) {
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-emerald-500/15 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-400";
+                statusBadge.textContent = "Live Sheets";
+            } else {
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
+                statusBadge.textContent = "Offline Mock";
+            }
+        }
+
+        // TOAST NOTIFICATIONS SERVICE
+        function showToast(title, msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let icon = 'fa-circle-check text-emerald-500';
+            let border = 'border-emerald-500/20 bg-white/95 dark:bg-slate-900/95';
+            if (type === 'error') {
+                icon = 'fa-triangle-exclamation text-red-500';
+                border = 'border-red-500/20 bg-white/95 dark:bg-slate-900/95';
+            } else if (type === 'warning') {
+                icon = 'fa-circle-exclamation text-amber-500';
+                border = 'border-amber-500/20 bg-white/95 dark:bg-slate-900/95';
+            }
+
+            toast.className = `flex gap-3 p-4 rounded-2xl border ${border} shadow-xl backdrop-blur-md pointer-events-auto transform transition-all duration-300 translate-x-12 opacity-0 text-slate-800 dark:text-slate-100`;
+            toast.innerHTML = `
+                <div class="text-lg shrink-0 mt-0.5"><i class="fa-solid ${icon}"></i></div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-wider">${title}</h5>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${msg}</p>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove('translate-x-12', 'opacity-0');
+            }, 50);
+
+            // Auto Remove Toast
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // LOGGING TOOL
+        function writeLog(activity, message) {
+            const consoleEl = document.getElementById('logs-console');
+            const timestamp = new Date().toLocaleTimeString('id-ID');
+            const logItem = document.createElement('div');
+            logItem.className = 'flex flex-col sm:flex-row gap-1 border-b border-slate-800/40 pb-1.5';
+            
+            let color = 'text-cyan-400';
+            if (activity.includes('OFF') || activity.includes('CUTOFF')) color = 'text-red-400';
+            if (activity.includes('SUCCESS') || activity.includes('ON')) color = 'text-emerald-400';
+            if (activity.includes('ERROR')) color = 'text-amber-500';
+
+            logItem.innerHTML = `
+                <span class="text-slate-500 shrink-0 font-medium">[${timestamp}]</span>
+                <span class="font-bold ${color} shrink-0">[${activity}]</span>
+                <span class="text-slate-300">${message}</span>
+            `;
+            
+            consoleEl.appendChild(logItem);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        // CLOCK SYSTEM
+        function updateClock() {
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const now = new Date();
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            const formattedClock = `${hours}:${minutes}:${seconds} WIB`;
+            
+            // Update Desktop Header
+            document.getElementById('header-date').textContent = formattedDate;
+            document.getElementById('header-clock').textContent = formattedClock;
+            
+            // Update Mobile Bar
+            document.getElementById('mobile-date').textContent = formattedDate;
+            document.getElementById('mobile-clock').textContent = formattedClock;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // PASSWORD EAGLE-EYE CONTROLLER
+        const passToggleBtn = document.getElementById('password-toggle');
+        const passToggleIcon = document.getElementById('password-toggle-icon');
+        const passInput = document.getElementById('password');
+
+        passToggleBtn.addEventListener('click', () => {
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                passToggleIcon.classList.remove('fa-eye');
+                passToggleIcon.classList.add('fa-eye-slash');
+                showToast('Mata Elang Aktif', 'PIN terlihat', 'warning');
+            } else {
+                passInput.type = 'password';
+                passToggleIcon.classList.remove('fa-eye-slash');
+                passToggleIcon.classList.add('fa-eye');
+            }
+        });
+
+        // THEME CONTROLLERS
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+                showToast('Tema Terang', 'Tampilan dialihkan ke mode siang');
+            } else {
+                htmlElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+                showToast('Tema Gelap', 'Tampilan dialihkan ke mode malam');
+            }
+        });
+
+        if (localStorage.getItem('theme') === 'light') {
+            htmlElement.classList.remove('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+
+        // LOGIN SYSTEM ACTION
+        const loginForm = document.getElementById('login-form');
+        const loginContainer = document.getElementById('login-container');
+        const dashboardContainer = document.getElementById('dashboard-container');
+        const mainHeader = document.getElementById('main-header');
+        const mobileClockBanner = document.getElementById('mobile-clock-banner');
+        const loginError = document.getElementById('login-error');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = passInput.value.trim();
+
+            const submitBtn = document.getElementById('login-submit-btn');
+            const btnText = document.getElementById('login-btn-text');
+
+            submitBtn.disabled = true;
+            btnText.textContent = "Memverifikasi Akses...";
+
+            try {
+                const result = await callBackend('checkLogin', { username, password });
+
+                if (result.success) {
+                    currentUser = { username, role: result.role || 'Administrator' };
+                    loginContainer.classList.add('hidden');
+                    dashboardContainer.classList.remove('hidden');
+                    mainHeader.classList.remove('hidden');
+                    mobileClockBanner.classList.remove('hidden');
+                    
+                    showToast('Akses Diberikan', `Selamat datang kembali, ${currentUser.role}!`);
+                    writeLog('LOGIN_SUCCESS', `Administrator "${username}" masuk ke panel kontrol daya.`);
+                    
+                    // Pull fresh data
+                    const roomsResult = await callBackend('getKamarData');
+                    if (roomsResult.success) {
+                        roomsData = roomsResult.rooms;
+                    }
+                    renderRooms();
+                } else {
+                    loginError.classList.remove('hidden');
+                    document.getElementById('login-error-text').textContent = result.message || "Nama pengguna atau PIN salah!";
+                    showToast('Akses Ditolak', 'Kredensial login tidak cocok!', 'error');
+                }
+            } catch(err) {
+                showToast('Koneksi Gagal', 'Gagal memverifikasi akun.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = "Akses Dashboard";
+            }
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            currentUser = null;
+            loginContainer.classList.remove('hidden');
+            dashboardContainer.classList.add('hidden');
+            mainHeader.classList.add('hidden');
+            mobileClockBanner.classList.add('hidden');
+            passInput.value = '';
+            document.getElementById('username').value = '';
+            showToast('Selesai Sesi', 'Anda telah keluar dari aplikasi.');
+        });
+
+
+        // ROOM RENDERING ENGINE
+        function renderRooms() {
+            const grid = document.getElementById('rooms-grid');
+            const searchVal = document.getElementById('search-room').value.toLowerCase();
+            const filterVal = document.getElementById('filter-status').value;
+            
+            grid.innerHTML = '';
+            
+            let total = roomsData.length;
+            let occupied = 0;
+            let activePower = 0;
+            let arrears = 0;
+
+            const filteredRooms = roomsData.filter(room => {
+                if (room.statusBayar !== 'Kosong') occupied++;
+                if (room.powerStatus === 'ON') activePower++;
+                if (room.statusBayar === 'Tunggakan') arrears++;
+
+                const matchesSearch = room.noKamar.includes(searchVal) || room.namaPenyewa.toLowerCase().includes(searchVal);
+                
+                let matchesFilter = true;
+                if (filterVal === 'lunas') matchesFilter = (room.statusBayar === 'Lunas');
+                else if (filterVal === 'tunggakan') matchesFilter = (room.statusBayar === 'Tunggakan');
+                else if (filterVal === 'kosong') matchesFilter = (room.statusBayar === 'Kosong');
+
+                return matchesSearch && matchesFilter;
+            });
+
+            // Update stats indicators
+            document.getElementById('stat-total-rooms').textContent = total;
+            document.getElementById('stat-occupied-rooms').textContent = occupied;
+            document.getElementById('stat-power-active').textContent = activePower;
+            document.getElementById('stat-arrears-count').textContent = `${arrears} Kamar`;
+
+            if (filteredRooms.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-700 mb-3"></i>
+                        <p class="text-slate-400 text-sm">Tidak ada kamar ditemukan.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredRooms.forEach(room => {
+                let badgeColor = '';
+                if (room.statusBayar === 'Lunas') {
+                    badgeColor = 'bg-emerald-500/10 text-emerald-500';
+                } else if (room.statusBayar === 'Tunggakan') {
+                    badgeColor = 'bg-red-500/10 text-red-500 animate-pulse';
+                } else {
+                    badgeColor = 'bg-slate-500/10 text-slate-400';
+                }
+
+                const powerIsOn = room.powerStatus === 'ON';
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all-300 flex flex-col justify-between space-y-5";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase">KAMAR</span>
+                            <h4 class="text-2xl font-black mt-0.5">${room.noKamar}</h4>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-full text-xs font-bold ${badgeColor}">
+                            ${room.statusBayar}
+                        </span>
+                    </div>
+
+                    <div class="space-y-2 border-t border-b border-slate-100 dark:border-slate-800 py-3 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Penyewa:</span>
+                            <span class="font-semibold text-slate-700 dark:text-slate-200">${room.namaPenyewa || '-'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Tarif:</span>
+                            <span class="font-semibold text-slate-700 dark:text-slate-200">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Jatuh Tempo:</span>
+                            <span class="font-semibold text-slate-700 dark:text-slate-200">${room.tanggalJatuhTempo || '-'}</span>
+                        </div>
+                    </div>
+
+                    <!-- SONOFF SMART CONTROLLER COMPONENT -->
+                    <div class="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="relative flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full ${powerIsOn ? 'bg-emerald-400' : 'bg-red-400'} opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 ${powerIsOn ? 'bg-emerald-500' : 'bg-red-500'}"></span>
+                                </span>
+                                <div>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sonoff Relay</p>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-200">${room.deviceId}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Switch button -->
+                            <button onclick="toggleRoomPower('${room.roomId}')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${powerIsOn ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${powerIsOn ? 'translate-x-5' : 'translate-x-0'}"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons (Edit & Delete) -->
+                    <div class="flex items-center justify-end gap-2.5">
+                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // TRIGGER RELAY POWER ON/OFF (Integrated securely)
+        async function toggleRoomPower(roomId) {
+            const room = roomsData.find(r => r.roomId === roomId);
+            if (!room) return;
+
+            // Security IoT Check: If room has Arrears (Tunggakan), block power turn on
+            if (room.statusBayar === 'Tunggakan' && room.powerStatus === 'OFF') {
+                showToast(
+                    'IoT Safety Interlock', 
+                    `Kamar ${room.noKamar} ditangguhkan! Selesaikan tunggakan untuk menyalakan daya.`, 
+                    'error'
+                );
+                writeLog('INTERLOCK_BLOCK', `Gagal menyalakan daya Kamar ${room.noKamar} karena menunggak.`);
+                return;
+            }
+
+            const newStatus = room.powerStatus === 'ON' ? 'OFF' : 'ON';
+            
+            // UI optimism update
+            room.powerStatus = newStatus;
+            renderRooms();
+
+            try {
+                const response = await callBackend('togglePower', { roomId, powerStatus: newStatus });
+                if (response.success) {
+                    showToast('IoT Berhasil', `Perangkat ${room.deviceId} diset ke ${newStatus}`);
+                    writeLog(`SONOFF_API_${newStatus}`, `Kirim POST -> ${room.deviceId} status: ${newStatus.toLowerCase()}. Payload: ${JSON.stringify(response.payload || {})}`);
+                } else {
+                    room.powerStatus = newStatus === 'ON' ? 'OFF' : 'ON';
+                    renderRooms();
+                    showToast('IoT Gagal', response.message || 'Gagal mengubah status daya.', 'error');
+                }
+            } catch(e) {
+                room.powerStatus = newStatus === 'ON' ? 'OFF' : 'ON';
+                renderRooms();
+            }
+        }
+
+        document.getElementById('search-room').addEventListener('input', renderRooms);
+        document.getElementById('filter-status').addEventListener('change', renderRooms);
+
+        const roomModal = document.getElementById('room-modal');
+        const roomForm = document.getElementById('room-form');
+
+        function openAddModal() {
+            document.getElementById('modal-title').textContent = "Tambah Kamar Baru";
+            document.getElementById('modal-room-id').value = '';
+            roomForm.reset();
+            
+            const randomID = Math.floor(100 + Math.random() * 900);
+            document.getElementById('modal-no-kamar').value = randomID;
+            document.getElementById('modal-device-id').value = 'SONOFF_' + randomID;
+            document.getElementById('modal-power-badge-container').classList.add('hidden');
+
+            roomModal.classList.remove('hidden');
+            setTimeout(() => {
+                roomModal.classList.add('opacity-100');
+                roomModal.querySelector('.transform').classList.remove('scale-95');
+            }, 50);
+        }
+
+        function openEditModal(roomId) {
+            const room = roomsData.find(r => r.roomId === roomId);
+            if (!room) return;
+
+            document.getElementById('modal-title').textContent = `Ubah Kamar ${room.noKamar}`;
+            document.getElementById('modal-room-id').value = room.roomId;
+            document.getElementById('modal-no-kamar').value = room.noKamar;
+            document.getElementById('modal-device-id').value = room.deviceId;
+            document.getElementById('modal-nama').value = room.namaPenyewa;
+            document.getElementById('modal-tarif').value = room.tarif;
+            document.getElementById('modal-jatuh-tempo').value = room.tanggalJatuhTempo;
+            document.getElementById('modal-status').value = room.statusBayar;
+            
+            const badge = document.getElementById('modal-power-badge');
+            badge.textContent = room.powerStatus;
+            if (room.powerStatus === 'ON') {
+                badge.className = 'px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400';
+            } else {
+                badge.className = 'px-2.5 py-1 rounded-full font-bold bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400';
+            }
+            document.getElementById('modal-power-badge-container').classList.remove('hidden');
+
+            roomModal.classList.remove('hidden');
+            setTimeout(() => {
+                roomModal.classList.add('opacity-100');
+                roomModal.querySelector('.transform').classList.remove('scale-95');
+            }, 50);
+        }
+
+        function closeModal() {
+            roomModal.classList.remove('opacity-100');
+            roomModal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                roomModal.classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('open-add-room-btn').addEventListener('click', openAddModal);
+        document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+        document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+
+        // SAVE / UPDATE ROOM ACTION
+        roomForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const roomId = document.getElementById('modal-room-id').value;
+            const noKamar = document.getElementById('modal-no-kamar').value.trim();
+            const deviceId = document.getElementById('modal-device-id').value.trim();
+            const namaPenyewa = document.getElementById('modal-nama').value.trim();
+            const tarif = parseFloat(document.getElementById('modal-tarif').value);
+            const tanggalJatuhTempo = document.getElementById('modal-jatuh-tempo').value;
+            const statusBayar = document.getElementById('modal-status').value;
+
+            let updatedRoom = {};
+
+            if (roomId) {
+                const existing = roomsData.find(r => r.roomId === roomId);
+                let power = existing ? existing.powerStatus : 'ON';
+                if (statusBayar === 'Tunggakan') {
+                    power = 'OFF';
+                }
+                
+                updatedRoom = {
+                    roomId,
+                    noKamar,
+                    deviceId,
+                    namaPenyewa,
+                    tarif,
+                    tanggalJatuhTempo,
+                    statusBayar,
+                    powerStatus: power
+                };
+            } else {
+                const newId = String(Date.now());
+                const initPower = (statusBayar === 'Tunggakan' || statusBayar === 'Kosong') ? 'OFF' : 'ON';
+                
+                updatedRoom = {
+                    roomId: newId,
+                    noKamar,
+                    deviceId,
+                    namaPenyewa,
+                    tarif,
+                    tanggalJatuhTempo,
+                    statusBayar,
+                    powerStatus: initPower
+                };
+            }
+
+            closeModal();
+            showToast('Menyimpan Data', 'Sedang mengirim pembaruan ke database...', 'warning');
+
+            try {
+                const response = await callBackend('saveKamar', { room: updatedRoom });
+                if (response.success) {
+                    const freshData = await callBackend('getKamarData');
+                    if (freshData.success) {
+                        roomsData = freshData.rooms;
+                    } else {
+                        const idx = roomsData.findIndex(r => r.roomId === updatedRoom.roomId);
+                        if (idx !== -1) roomsData[idx] = updatedRoom;
+                        else roomsData.push(updatedRoom);
+                    }
+                    renderRooms();
+                    showToast('Berhasil Disimpan', `Kamar ${noKamar} telah sinkron.`);
+                    writeLog('DB_SYNC_OK', `Data kamar ${noKamar} disimpan.`);
+                } else {
+                    showToast('Gagal Menyimpan', response.message || 'Penyimpanan ditolak database.', 'error');
+                }
+            } catch(err) {
+                showToast('Koneksi Lemah', 'Mengalami kegagalan koneksi.', 'error');
+            }
+        });
+
+        let roomToDeleteId = null;
+
+        // Custom Delete Modal Trigger
+        window.deleteRoom = function(roomId) {
+            const room = roomsData.find(r => r.roomId === roomId);
+            if (!room) return;
+
+            roomToDeleteId = roomId;
+            document.getElementById('delete-room-name').textContent = `Kamar ${room.noKamar}`;
+            
+            const deleteModal = document.getElementById('delete-confirm-modal');
+            deleteModal.classList.remove('hidden');
+            setTimeout(() => {
+                deleteModal.classList.add('opacity-100');
+                deleteModal.querySelector('.transform').classList.remove('scale-95');
+            }, 50);
+        };
+
+        // Cancel Delete Event Binding
+        document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+            const deleteModal = document.getElementById('delete-confirm-modal');
+            deleteModal.classList.remove('opacity-100');
+            deleteModal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+            }, 300);
+            roomToDeleteId = null;
+        });
+
+        // Confirm Delete Event Binding
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            if (roomToDeleteId) {
+                const room = roomsData.find(r => r.roomId === roomToDeleteId);
+                if (room) {
+                    showToast('Menghapus Kamar', `Sedang memproses penghapusan kamar ${room.noKamar}...`, 'warning');
+                    try {
+                        const response = await callBackend('deleteKamar', { roomId: roomToDeleteId });
+                        if (response.success) {
+                            roomsData = roomsData.filter(r => r.roomId !== roomToDeleteId);
+                            renderRooms();
+                            showToast('Kamar Dihapus', `Data kamar ${room.noKamar} telah dihilangkan dari sistem.`, 'warning');
+                            writeLog('DELETE_ROOM', `Kamar ${room.noKamar} telah dihapus.`);
+                        } else {
+                            showToast('Gagal Menghapus', response.message || 'Database menolak aksi hapus.', 'error');
+                        }
+                    } catch(e) {
+                        showToast('Error Koneksi', 'Gagal memproses ke database.', 'error');
+                    }
+                }
+            }
+            const deleteModal = document.getElementById('delete-confirm-modal');
+            deleteModal.classList.remove('opacity-100');
+            deleteModal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+            }, 300);
+            roomToDeleteId = null;
+        });
+
+        // INIT CONSOLE & CONNECTION
+        window.onload = function() {
+            updateConnectionStatusUI();
+            writeLog('SYSTEM_INIT', 'Inisialisasi sistem pemutus daya Sonoff berhasil.');
+            writeLog('SECURITY_CHECK', 'Otorisasi login diverifikasi. Mode siaga aktif.');
+            
+            if (isLiveMode) {
+                writeLog('LIVE_CONNECT', `Menghubungkan ke Google Sheets via: ${activeGasUrl.substring(0, 45)}...`);
+            } else {
+                writeLog('MOCK_MODE', 'Berjalan dalam mode Simulasi Offline.');
+            }
+        };
+    </script>
+<script type="text/javascript">
+    // Menonaktifkan Klik Kanan
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
+            (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>
