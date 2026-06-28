@@ -70,7 +70,7 @@
 
     <div id="app-wrapper" class="min-h-screen flex flex-col">
         
-        <!-- HEADER / NAVIGATION (Always visible once logged in) -->
+        <!-- HEADER / NAVIGATION -->
         <header id="main-header" class="hidden border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-all-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 
@@ -84,8 +84,7 @@
                             <h1 class="text-lg sm:text-xl font-extrabold tracking-tight glowing-pulsing-title bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">
                                 KOS SMART POWER
                             </h1>
-                            <!-- Connection Badge integrated in header -->
-                            <span id="connection-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-850 dark:text-slate-400">Offline Mock</span>
+                            <span id="connection-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">Offline Mock</span>
                         </div>
                         <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-widest uppercase">IoT Dashboard</p>
                     </div>
@@ -145,24 +144,23 @@
                     <!-- Login Form -->
                     <form id="login-form" class="space-y-5">
                         <div>
-                            <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username Administrator</label>
+                            <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username Akses</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
                                     <i class="fa-solid fa-user"></i>
                                 </span>
-                                <input type="text" id="username" required class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="admin">
+                                <input type="text" id="username" required class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="Masukkan username">
                             </div>
                         </div>
 
                         <div>
-                            <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">PIN / Kata Sandi Akses</label>
+                            <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Kata Sandi / PIN</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
                                     <i class="fa-solid fa-key"></i>
                                 </span>
-                                <!-- Password Input with Eagle Eye Toggle Button -->
                                 <input type="password" id="password" required class="w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="••••••••">
-                                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-brand-500 transition-colors focus:outline-none" title="Mata Elang - Intip Kata Sandi">
+                                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-brand-500 transition-colors focus:outline-none" title="Intip PIN">
                                     <i id="password-toggle-icon" class="fa-solid fa-eye text-base"></i>
                                 </button>
                             </div>
@@ -190,20 +188,33 @@
             <!-- MAIN DASHBOARD -->
             <div id="dashboard-container" class="hidden flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
                 
-                <!-- Action Row -->
-                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
-                    <div>
-                        <h2 class="text-xl font-extrabold tracking-tight">Kamar & Kontrol Relay Daya</h2>
-                        <p class="text-xs text-slate-400 mt-1">Gunakan panel ini untuk mengaktifkan/mematikan saklar listrik per kamar secara remote.</p>
+                <!-- Tab Switching Panel & Action Row -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+                    <div class="flex items-center gap-2">
+                        <button id="nav-rooms-btn" class="px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2">
+                            <i class="fa-solid fa-door-closed"></i>
+                            <span>Kelola Kamar</span>
+                        </button>
+                        <button id="nav-admins-btn" class="hidden px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <span>Kelola Akun Admin</span>
+                        </button>
                     </div>
-                    <button id="open-add-room-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-all-300 flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Tambah Kamar</span>
-                    </button>
+                    
+                    <!-- Quick Actions -->
+                    <div class="flex items-center gap-3">
+                        <span id="role-badge" class="px-3 py-1.5 rounded-xl font-bold text-xs uppercase bg-brand-500/10 text-brand-500">
+                            Role: Loading...
+                        </span>
+                        <button id="open-add-room-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-all-300 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Kamar</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- OVERVIEW VIEW -->
-                <div id="tab-overview" class="space-y-8">
+                <!-- OVERVIEW VIEW (KAMAR) -->
+                <div id="section-rooms" class="space-y-8">
 
                     <!-- Top KPI Summary Cards -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -252,29 +263,10 @@
                         </div>
                     </div>
 
-                    <!-- Informational Banner -->
-                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div class="flex gap-3">
-                            <div class="p-2 bg-amber-500/20 text-amber-500 rounded-xl shrink-0 mt-0.5">
-                                <i class="fa-solid fa-robot"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-sm text-amber-700 dark:text-amber-400">Sistem Proteksi Tunggakan (Sonoff Automation)</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Jika status diubah ke "Tunggakan", sistem IoT akan memutus daya secara otomatis via API Sonoff.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">
-                                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Integrasi Sonoff Aktif
-                            </span>
-                        </div>
-                    </div>
-
                     <!-- Room Grid & Search Filter -->
                     <div class="space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <h3 class="text-lg font-bold">Daftar Kamar Aktif</h3>
+                            <h3 class="text-lg font-bold">Daftar Kamar Anda</h3>
                             
                             <!-- Filter Group -->
                             <div class="flex items-center gap-2 max-w-sm w-full sm:w-auto">
@@ -315,6 +307,39 @@
                         </div>
                     </div>
 
+                </div>
+
+                <!-- ADMIN MANAGEMENT VIEW (SUPERADMIN ONLY) -->
+                <div id="section-admins" class="hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight">Kelola Akun Admin</h3>
+                            <p class="text-xs text-slate-400 mt-1">Buat, edit, dan batasi nomor kamar kos yang didelegasikan kepada masing-masing admin.</p>
+                        </div>
+                        <button id="open-add-admin-btn" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all-300 flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Tambah Akun Admin</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                                    <tr>
+                                        <th class="p-4 font-bold text-slate-400">Username</th>
+                                        <th class="p-4 font-bold text-slate-400">Sandi / PIN</th>
+                                        <th class="p-4 font-bold text-slate-400">Akses Peran</th>
+                                        <th class="p-4 font-bold text-slate-400">Alokasi Kamar Dikelola</th>
+                                        <th class="p-4 font-bold text-slate-400 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admins-table-body">
+                                    <!-- Dinamis disuntikkan via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -398,6 +423,57 @@
         </div>
     </div>
 
+    <!-- ADMIN MODAL FORM (SUPERADMIN ONLY) -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 transform scale-95 transition-transform duration-300">
+            
+            <div class="flex items-center justify-between">
+                <h3 id="admin-modal-title" class="text-lg font-bold">Tambah Akun Admin</h3>
+                <button id="close-admin-modal-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="admin-form" class="space-y-4">
+                <div>
+                    <label for="admin-modal-username" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Username Admin</label>
+                    <input type="text" id="admin-modal-username" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Contoh: admin_lantai1">
+                </div>
+
+                <div>
+                    <label for="admin-modal-password" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Kata Sandi / PIN</label>
+                    <input type="text" id="admin-modal-password" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Masukkan sandi">
+                </div>
+
+                <div>
+                    <label for="admin-modal-role" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Akses Peran</label>
+                    <select id="admin-modal-role" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
+                        <option value="Administrator">Administrator (Kamar Terbatas)</option>
+                        <option value="Superadmin">Superadmin (Akses Penuh)</option>
+                    </select>
+                </div>
+
+                <!-- Checked list of rooms -->
+                <div id="rooms-assign-container">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Delegasi Kamar yang Dikelola</label>
+                    <div id="rooms-checkbox-list" class="max-h-36 overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl p-3 space-y-2 bg-slate-50 dark:bg-slate-950/50">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">*Jika tipe peran diset ke Superadmin, mereka otomatis dapat mengelola semua kamar.</p>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4">
+                    <button type="button" id="cancel-admin-modal-btn" class="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-brand-500/10 transition-colors">
+                        Simpan Akun
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- DELETE CONFIRMATION MODAL -->
     <div id="delete-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
         <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-6 transform scale-95 transition-transform duration-300">
@@ -405,8 +481,8 @@
                 <div class="inline-flex p-3 bg-red-500/10 text-red-500 rounded-2xl">
                     <i class="fa-solid fa-triangle-exclamation text-xl animate-bounce"></i>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Hapus Kamar Kos?</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Apakah Anda yakin ingin menghapus <span id="delete-room-name" class="font-bold text-brand-600 dark:text-brand-400"></span>? Semua data penyewaan akan terhapus secara permanen.</p>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Konfirmasi Tindakan</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Apakah Anda yakin ingin menghapus <span id="delete-target-name" class="font-bold text-brand-600 dark:text-brand-400"></span>? Tindakan ini bersifat permanen.</p>
             </div>
             <div class="flex items-center gap-3">
                 <button id="cancel-delete-btn" class="w-1/2 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs text-slate-700 dark:text-slate-300 transition-colors">
@@ -424,10 +500,9 @@
         // =================================================================
         // ⚙️ KONFIGURASI INTEGRASI DATABASE LIVE (GOOGLE APPS SCRIPT)
         // =================================================================
-        // URL Web App dari deployment Google Apps Script Anda (HARDCODED)
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbx3AU-am5RlQ6Iqh9E4qoymREX_nH5NOzkYyNqchWg36px0TiqPNW1LQbZZzMVZIW4/exec';
 
-        // MOCK STATE FOR OFFLINE DEMO (Hanya digunakan jika sambungan internet terputus)
+        // MOCK STATE FOR OFFLINE FALLBACK
         let roomsData = [
             { roomId: '101', noKamar: '101', namaPenyewa: 'Budi Santoso', tarif: 1200000, tanggalJatuhTempo: '2026-07-10', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_101' },
             { roomId: '102', noKamar: '102', namaPenyewa: 'Dewi Lestari', tarif: 1500000, tanggalJatuhTempo: '2026-06-25', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_102' },
@@ -436,52 +511,61 @@
             { roomId: '105', noKamar: '105', namaPenyewa: 'Siti Rahma', tarif: 1250000, tanggalJatuhTempo: '2026-06-20', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_105' }
         ];
 
-        let currentUser = null;
+        let adminsData = [
+            { username: 'superadmin', password: 'super123', role: 'Superadmin', kamarDikelola: 'all' },
+            { username: 'admin', password: 'admin123', role: 'Administrator', kamarDikelola: '101,102' }
+        ];
 
-        // Validating integration variables directly from code configuration
+        let currentUser = null; 
+
         const activeGasUrl = (GAS_URL && GAS_URL !== 'TEMPELKAN_GAS_URL_ANDA_DI_SINI') ? GAS_URL.trim() : '';
         const isLiveMode = activeGasUrl !== '';
 
-        // Custom API Router (Handles live Google Sheets or fallback to Offline Mock variables)
+        // API Fetch Router: Cerdas mendeteksi google.script.run terlebih dahulu, lalu fallback ke HTTP fetch
         async function callBackend(action, data = {}) {
-            if (!isLiveMode || !activeGasUrl) {
-                return handleMockAction(action, data);
-            }
-
-            try {
-                const payload = { action, ...data };
-                // Using text/plain is crucial to prevent preflight OPTIONS checks in Google Web Apps
-                const response = await fetch(activeGasUrl, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    },
-                    body: JSON.stringify(payload)
+            // 1. Prioritaskan Eksekusi Native Google Apps Script (Bebas dari kendala CORS)
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                return new Promise((resolve) => {
+                    google.script.run
+                        .withSuccessHandler((res) => resolve(res))
+                        .withFailureHandler((err) => {
+                            writeLog('GAS_NATIVE_ERROR', err.message);
+                            resolve({ success: false, message: err.message });
+                        })
+                        .executeAction(action, data);
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP Error Status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                writeLog('LIVE_API_ERROR', `Koneksi gagal ke Sheets. Pesan: ${error.message}`);
-                showToast('Koneksi Gagal', 'Gagal memproses data live dari Sheets. Menggunakan mode Simulasi.', 'error');
-                console.error(error);
-                return handleMockAction(action, data);
             }
+
+            // 2. Fallback ke API Fetch HTTP (Jika dijalankan dari luar server Google Apps Script)
+            if (isLiveMode && activeGasUrl) {
+                try {
+                    const payload = { action, ...data };
+                    const response = await fetch(activeGasUrl, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP Status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    writeLog('API_HTTP_ERROR', `Pesan: ${error.message}`);
+                    return handleMockAction(action, data);
+                }
+            }
+
+            // 3. Gunakan simulasi tiruan offline jika tidak ada koneksi live yang diset
+            return handleMockAction(action, data);
         }
 
-        // Offline Fallback Handler
+        // Penanganan fallback simulasi luring
         function handleMockAction(action, data) {
-            writeLog('SIMULASI_MOCK', `Melakukan aksi lokal offline: ${action}`);
+            writeLog('SIMULASI_MOCK', `Aksi lokal offline: ${action}`);
             if (action === 'checkLogin') {
-                if (data.username === 'admin' && data.password === 'admin123') {
-                    return { success: true, role: 'Administrator' };
-                }
-                return { success: false, message: 'ID atau Sandi tidak sah' };
+                const u = adminsData.find(item => item.username.toLowerCase() === data.username.toLowerCase() && item.password === data.password);
+                if (u) return { success: true, role: u.role, kamarDikelola: u.kamarDikelola };
+                return { success: false, message: 'ID atau Sandi tidak cocok' };
             }
             if (action === 'getKamarData') {
                 return { success: true, rooms: roomsData };
@@ -489,11 +573,8 @@
             if (action === 'saveKamar') {
                 const r = data.room;
                 const idx = roomsData.findIndex(item => item.roomId === r.roomId);
-                if (idx !== -1) {
-                    roomsData[idx] = r;
-                } else {
-                    roomsData.push(r);
-                }
+                if (idx !== -1) roomsData[idx] = r;
+                else roomsData.push(r);
                 return { success: true };
             }
             if (action === 'togglePower') {
@@ -503,23 +584,39 @@
                         return { success: false, message: 'Dilarang menyalakan daya! Penyewa memiliki tunggakan.' };
                     }
                     room.powerStatus = data.powerStatus;
-                    return { success: true, message: `Status diset ${data.powerStatus}` };
+                    return { success: true };
                 }
-                return { success: false, message: 'Kamar tidak ada' };
+                return { success: false };
             }
             if (action === 'deleteKamar') {
                 roomsData = roomsData.filter(item => item.roomId !== data.roomId);
                 return { success: true };
             }
+            if (action === 'getAdmins') {
+                return { success: true, admins: adminsData };
+            }
+            if (action === 'saveAdmin') {
+                const idx = adminsData.findIndex(item => item.username.toLowerCase() === data.adminData.username.toLowerCase());
+                if (idx !== -1) adminsData[idx] = data.adminData;
+                else adminsData.push(data.adminData);
+                return { success: true };
+            }
+            if (action === 'deleteAdmin') {
+                adminsData = adminsData.filter(item => item.username.toLowerCase() !== data.adminUsername.toLowerCase());
+                return { success: true };
+            }
             return { success: false };
         }
 
-        // Update top-header status badge dynamically based on configuration
         function updateConnectionStatusUI() {
             const statusBadge = document.getElementById('connection-status-badge');
-            if (isLiveMode) {
+            // Deteksi lingkungan eksekusi
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
                 statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-emerald-500/15 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-400";
-                statusBadge.textContent = "Live Sheets";
+                statusBadge.textContent = "Live Apps Script";
+            } else if (isLiveMode) {
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-indigo-500/15 text-indigo-500 dark:bg-indigo-500/20 dark:text-indigo-400";
+                statusBadge.textContent = "Live API Fetch";
             } else {
                 statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
                 statusBadge.textContent = "Offline Mock";
@@ -530,9 +627,7 @@
         function showToast(title, msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
-            let icon = 'fa-circle-check text-emerald-500';
-            let border = 'border-emerald-500/20 bg-white/95 dark:bg-slate-900/95';
+            let icon = 'fa-circle-check text-emerald-500', border = 'border-emerald-500/20 bg-white/95 dark:bg-slate-900/95';
             if (type === 'error') {
                 icon = 'fa-triangle-exclamation text-red-500';
                 border = 'border-red-500/20 bg-white/95 dark:bg-slate-900/95';
@@ -540,7 +635,6 @@
                 icon = 'fa-circle-exclamation text-amber-500';
                 border = 'border-amber-500/20 bg-white/95 dark:bg-slate-900/95';
             }
-
             toast.className = `flex gap-3 p-4 rounded-2xl border ${border} shadow-xl backdrop-blur-md pointer-events-auto transform transition-all duration-300 translate-x-12 opacity-0 text-slate-800 dark:text-slate-100`;
             toast.innerHTML = `
                 <div class="text-lg shrink-0 mt-0.5"><i class="fa-solid ${icon}"></i></div>
@@ -549,68 +643,37 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${msg}</p>
                 </div>
             `;
-
             container.appendChild(toast);
-            
-            // Trigger animation
-            setTimeout(() => {
-                toast.classList.remove('translate-x-12', 'opacity-0');
-            }, 50);
-
-            // Auto Remove Toast
+            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 50);
             setTimeout(() => {
                 toast.classList.add('translate-x-12', 'opacity-0');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
+                setTimeout(() => toast.remove(), 300);
             }, 4000);
         }
 
         // LOGGING TOOL
         function writeLog(activity, message) {
             const consoleEl = document.getElementById('logs-console');
+            if (!consoleEl) return;
             const timestamp = new Date().toLocaleTimeString('id-ID');
             const logItem = document.createElement('div');
             logItem.className = 'flex flex-col sm:flex-row gap-1 border-b border-slate-800/40 pb-1.5';
-            
             let color = 'text-cyan-400';
-            if (activity.includes('OFF') || activity.includes('CUTOFF')) color = 'text-red-400';
-            if (activity.includes('SUCCESS') || activity.includes('ON')) color = 'text-emerald-400';
-            if (activity.includes('ERROR')) color = 'text-amber-500';
-
-            logItem.innerHTML = `
-                <span class="text-slate-500 shrink-0 font-medium">[${timestamp}]</span>
-                <span class="font-bold ${color} shrink-0">[${activity}]</span>
-                <span class="text-slate-300">${message}</span>
-            `;
-            
+            if (activity.includes('OFF') || activity.includes('CUTOFF') || activity.includes('BLOCK')) color = 'text-red-400';
+            if (activity.includes('SUCCESS') || activity.includes('ON') || activity.includes('OK')) color = 'text-emerald-400';
+            logItem.innerHTML = `<span class="text-slate-500 shrink-0 font-medium">[${timestamp}]</span> <span class="font-bold ${color} shrink-0">[${activity}]</span> <span class="text-slate-300">${message}</span>`;
             consoleEl.appendChild(logItem);
             consoleEl.scrollTop = consoleEl.scrollHeight;
         }
 
         // CLOCK SYSTEM
         function updateClock() {
-            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            
-            const now = new Date();
-            const dayName = days[now.getDay()];
-            const date = now.getDate();
-            const monthName = months[now.getMonth()];
-            const year = now.getFullYear();
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
-            const formattedClock = `${hours}:${minutes}:${seconds} WIB`;
-            
-            // Update Desktop Header
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'], months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const now = new Date(), dayName = days[now.getDay()], date = now.getDate(), monthName = months[now.getMonth()], year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0'), minutes = String(now.getMinutes()).padStart(2, '0'), seconds = String(now.getSeconds()).padStart(2, '0');
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`, formattedClock = `${hours}:${minutes}:${seconds} WIB`;
             document.getElementById('header-date').textContent = formattedDate;
             document.getElementById('header-clock').textContent = formattedClock;
-            
-            // Update Mobile Bar
             document.getElementById('mobile-date').textContent = formattedDate;
             document.getElementById('mobile-clock').textContent = formattedClock;
         }
@@ -618,95 +681,94 @@
         updateClock();
 
         // PASSWORD EAGLE-EYE CONTROLLER
-        const passToggleBtn = document.getElementById('password-toggle');
-        const passToggleIcon = document.getElementById('password-toggle-icon');
-        const passInput = document.getElementById('password');
-
+        const passToggleBtn = document.getElementById('password-toggle'), passToggleIcon = document.getElementById('password-toggle-icon'), passInput = document.getElementById('password');
         passToggleBtn.addEventListener('click', () => {
             if (passInput.type === 'password') {
                 passInput.type = 'text';
-                passToggleIcon.classList.remove('fa-eye');
-                passToggleIcon.classList.add('fa-eye-slash');
+                passToggleIcon.className = 'fa-solid fa-eye-slash text-base';
                 showToast('Mata Elang Aktif', 'PIN terlihat', 'warning');
             } else {
                 passInput.type = 'password';
-                passToggleIcon.classList.remove('fa-eye-slash');
-                passToggleIcon.classList.add('fa-eye');
+                passToggleIcon.className = 'fa-solid fa-eye text-base';
             }
         });
 
         // THEME CONTROLLERS
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const htmlElement = document.documentElement;
-
+        const themeToggleBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), htmlElement = document.documentElement;
         themeToggleBtn.addEventListener('click', () => {
             if (htmlElement.classList.contains('dark')) {
                 htmlElement.classList.remove('dark');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                themeIcon.className = 'fa-solid fa-moon';
                 localStorage.setItem('theme', 'light');
-                showToast('Tema Terang', 'Tampilan dialihkan ke mode siang');
             } else {
                 htmlElement.classList.add('dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+                themeIcon.className = 'fa-solid fa-sun';
                 localStorage.setItem('theme', 'dark');
-                showToast('Tema Gelap', 'Tampilan dialihkan ke mode malam');
             }
         });
-
         if (localStorage.getItem('theme') === 'light') {
             htmlElement.classList.remove('dark');
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
+            themeIcon.className = 'fa-solid fa-moon';
         }
 
-        // LOGIN SYSTEM ACTION
-        const loginForm = document.getElementById('login-form');
-        const loginContainer = document.getElementById('login-container');
-        const dashboardContainer = document.getElementById('dashboard-container');
-        const mainHeader = document.getElementById('main-header');
-        const mobileClockBanner = document.getElementById('mobile-clock-banner');
-        const loginError = document.getElementById('login-error');
+        // LOGIN ACCESS HANDLER
+        const loginForm = document.getElementById('login-form'), loginContainer = document.getElementById('login-container'), dashboardContainer = document.getElementById('dashboard-container'), mainHeader = document.getElementById('main-header'), mobileClockBanner = document.getElementById('mobile-clock-banner'), loginError = document.getElementById('login-error');
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = passInput.value.trim();
-
-            const submitBtn = document.getElementById('login-submit-btn');
-            const btnText = document.getElementById('login-btn-text');
+            const submitBtn = document.getElementById('login-submit-btn'), btnText = document.getElementById('login-btn-text');
 
             submitBtn.disabled = true;
-            btnText.textContent = "Memverifikasi Akses...";
+            btnText.textContent = "Memverifikasi...";
 
             try {
                 const result = await callBackend('checkLogin', { username, password });
-
                 if (result.success) {
-                    currentUser = { username, role: result.role || 'Administrator' };
+                    currentUser = {
+                        username: username,
+                        role: result.role,
+                        kamarDikelola: result.kamarDikelola === 'all' ? 'all' : result.kamarDikelola.split(',').map(n => n.trim())
+                    };
+
                     loginContainer.classList.add('hidden');
                     dashboardContainer.classList.remove('hidden');
                     mainHeader.classList.remove('hidden');
                     mobileClockBanner.classList.remove('hidden');
                     
-                    showToast('Akses Diberikan', `Selamat datang kembali, ${currentUser.role}!`);
-                    writeLog('LOGIN_SUCCESS', `Administrator "${username}" masuk ke panel kontrol daya.`);
-                    
-                    // Pull fresh data
-                    const roomsResult = await callBackend('getKamarData');
-                    if (roomsResult.success) {
-                        roomsData = roomsResult.rooms;
+                    document.getElementById('role-badge').textContent = `Role: ${currentUser.role}`;
+
+                    // Tampilkan navigasi admin khusus Superadmin
+                    const navAdminsBtn = document.getElementById('nav-admins-btn');
+                    if (currentUser.role === 'Superadmin') {
+                        navAdminsBtn.classList.remove('hidden');
+                    } else {
+                        navAdminsBtn.classList.add('hidden');
                     }
+
+                    // Pengaturan visibilitas tombol tambah kamar (Hanya Superadmin)
+                    const openAddRoomBtn = document.getElementById('open-add-room-btn');
+                    if (currentUser.role === 'Superadmin') {
+                        openAddRoomBtn.classList.remove('hidden');
+                    } else {
+                        openAddRoomBtn.classList.add('hidden');
+                    }
+
+                    showToast('Akses Diterima', `Selamat datang kembali, ${currentUser.username}!`);
+                    writeLog('LOGIN_OK', `User "${username}" (${currentUser.role}) berhasil masuk.`);
+                    
+                    // Tarik data kamar
+                    const roomsResult = await callBackend('getKamarData');
+                    if (roomsResult.success) roomsData = roomsResult.rooms;
+                    
                     renderRooms();
                 } else {
                     loginError.classList.remove('hidden');
-                    document.getElementById('login-error-text').textContent = result.message || "Nama pengguna atau PIN salah!";
-                    showToast('Akses Ditolak', 'Kredensial login tidak cocok!', 'error');
+                    document.getElementById('login-error-text').textContent = result.message || "Kredensial tidak sah!";
                 }
             } catch(err) {
-                showToast('Koneksi Gagal', 'Gagal memverifikasi akun.', 'error');
+                showToast('Koneksi Error', 'Terjadi kegagalan verifikasi akun.', 'error');
             } finally {
                 submitBtn.disabled = false;
                 btnText.textContent = "Akses Dashboard";
@@ -722,11 +784,10 @@
             mobileClockBanner.classList.add('hidden');
             passInput.value = '';
             document.getElementById('username').value = '';
-            showToast('Selesai Sesi', 'Anda telah keluar dari aplikasi.');
+            showToast('Sesi Berakhir', 'Anda telah keluar dari aplikasi.');
         });
 
-
-        // ROOM RENDERING ENGINE
+        // ROOM RENDERING ENGINE WITH ROLE LIMITS
         function renderRooms() {
             const grid = document.getElementById('rooms-grid');
             const searchVal = document.getElementById('search-room').value.toLowerCase();
@@ -734,18 +795,21 @@
             
             grid.innerHTML = '';
             
-            let total = roomsData.length;
-            let occupied = 0;
-            let activePower = 0;
-            let arrears = 0;
+            let total = 0, occupied = 0, activePower = 0, arrears = 0;
 
-            const filteredRooms = roomsData.filter(room => {
+            // Filter kamar sesuai hak kelola Admin
+            const authorizedRooms = roomsData.filter(room => {
+                if (currentUser.role === 'Superadmin' || currentUser.kamarDikelola === 'all') return true;
+                return currentUser.kamarDikelola.includes(room.noKamar);
+            });
+
+            const filteredRooms = authorizedRooms.filter(room => {
+                total++;
                 if (room.statusBayar !== 'Kosong') occupied++;
                 if (room.powerStatus === 'ON') activePower++;
                 if (room.statusBayar === 'Tunggakan') arrears++;
 
                 const matchesSearch = room.noKamar.includes(searchVal) || room.namaPenyewa.toLowerCase().includes(searchVal);
-                
                 let matchesFilter = true;
                 if (filterVal === 'lunas') matchesFilter = (room.statusBayar === 'Lunas');
                 else if (filterVal === 'tunggakan') matchesFilter = (room.statusBayar === 'Tunggakan');
@@ -754,7 +818,6 @@
                 return matchesSearch && matchesFilter;
             });
 
-            // Update stats indicators
             document.getElementById('stat-total-rooms').textContent = total;
             document.getElementById('stat-occupied-rooms').textContent = occupied;
             document.getElementById('stat-power-active').textContent = activePower;
@@ -764,23 +827,26 @@
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
                         <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-700 mb-3"></i>
-                        <p class="text-slate-400 text-sm">Tidak ada kamar ditemukan.</p>
+                        <p class="text-slate-400 text-sm">Tidak ada kamar kos yang dikelola ditemukan.</p>
                     </div>
                 `;
                 return;
             }
 
             filteredRooms.forEach(room => {
-                let badgeColor = '';
-                if (room.statusBayar === 'Lunas') {
-                    badgeColor = 'bg-emerald-500/10 text-emerald-500';
-                } else if (room.statusBayar === 'Tunggakan') {
-                    badgeColor = 'bg-red-500/10 text-red-500 animate-pulse';
-                } else {
-                    badgeColor = 'bg-slate-500/10 text-slate-400';
-                }
-
+                let badgeColor = room.statusBayar === 'Lunas' ? 'bg-emerald-500/10 text-emerald-500' : (room.statusBayar === 'Tunggakan' ? 'bg-red-500/10 text-red-500 animate-pulse' : 'bg-slate-500/10 text-slate-400');
                 const powerIsOn = room.powerStatus === 'ON';
+
+                // Hak edit dan hapus kamar dibatasi hanya untuk Superadmin
+                const isSuper = currentUser.role === 'Superadmin';
+                const actionButtons = `
+                    <div class="flex items-center justify-end gap-2.5">
+                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data"><i class="fa-solid fa-pen-to-square"></i></button>
+                        ${isSuper ? `
+                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar"><i class="fa-solid fa-trash-can"></i></button>
+                        ` : ''}
+                    </div>
+                `;
 
                 const card = document.createElement('div');
                 card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all-300 flex flex-col justify-between space-y-5";
@@ -790,27 +856,13 @@
                             <span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase">KAMAR</span>
                             <h4 class="text-2xl font-black mt-0.5">${room.noKamar}</h4>
                         </div>
-                        <span class="px-3 py-1.5 rounded-full text-xs font-bold ${badgeColor}">
-                            ${room.statusBayar}
-                        </span>
+                        <span class="px-3 py-1.5 rounded-full text-xs font-bold ${badgeColor}">${room.statusBayar}</span>
                     </div>
-
                     <div class="space-y-2 border-t border-b border-slate-100 dark:border-slate-800 py-3 text-xs">
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Penyewa:</span>
-                            <span class="font-semibold text-slate-700 dark:text-slate-200">${room.namaPenyewa || '-'}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Tarif:</span>
-                            <span class="font-semibold text-slate-700 dark:text-slate-200">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-slate-400">Jatuh Tempo:</span>
-                            <span class="font-semibold text-slate-700 dark:text-slate-200">${room.tanggalJatuhTempo || '-'}</span>
-                        </div>
+                        <div class="flex justify-between"><span class="text-slate-400">Penyewa:</span><span class="font-semibold">${room.namaPenyewa || '-'}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Tarif:</span><span class="font-semibold">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Jatuh Tempo:</span><span class="font-semibold">${room.tanggalJatuhTempo || '-'}</span></div>
                     </div>
-
-                    <!-- SONOFF SMART CONTROLLER COMPONENT -->
                     <div class="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -820,62 +872,76 @@
                                 </span>
                                 <div>
                                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sonoff Relay</p>
-                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-200">${room.deviceId}</p>
+                                    <p class="text-xs font-bold">${room.deviceId}</p>
                                 </div>
                             </div>
-                            
-                            <!-- Switch button -->
                             <button onclick="toggleRoomPower('${room.roomId}')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${powerIsOn ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}">
                                 <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${powerIsOn ? 'translate-x-5' : 'translate-x-0'}"></span>
                             </button>
                         </div>
                     </div>
-
-                    <!-- Action buttons (Edit & Delete) -->
-                    <div class="flex items-center justify-end gap-2.5">
-                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
+                    ${actionButtons}
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // TRIGGER RELAY POWER ON/OFF (Integrated securely)
+        // ADMINS RENDERING ENGINE
+        function renderAdmins() {
+            const tbody = document.getElementById('admins-table-body');
+            tbody.innerHTML = '';
+            
+            adminsData.forEach(admin => {
+                const isSuper = admin.role === 'Superadmin';
+                const row = document.createElement('tr');
+                row.className = "border-b border-slate-100 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/20";
+                row.innerHTML = `
+                    <td class="p-4 font-semibold">${admin.username}</td>
+                    <td class="p-4 font-mono text-slate-400 dark:text-slate-500">${admin.password}</td>
+                    <td class="p-4">
+                        <span class="px-2.5 py-1 rounded-full font-bold text-[10px] ${isSuper ? 'bg-indigo-500/15 text-indigo-500' : 'bg-blue-500/15 text-blue-500'}">
+                            ${admin.role}
+                        </span>
+                    </td>
+                    <td class="p-4 max-w-[200px] truncate" title="${admin.kamarDikelola}">
+                        <span class="font-medium text-slate-600 dark:text-slate-300">
+                            ${isSuper ? 'Semua Kamar' : (admin.kamarDikelola || '-')}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openEditAdminModal('${admin.username}')" class="p-2 bg-slate-100 dark:bg-slate-850 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl transition-colors"><i class="fa-solid fa-user-pen"></i></button>
+                            <button onclick="deleteAdminAccount('${admin.username}')" class="p-2 bg-slate-100 dark:bg-slate-850 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // CONTROL RELAY POWER
         async function toggleRoomPower(roomId) {
             const room = roomsData.find(r => r.roomId === roomId);
             if (!room) return;
 
-            // Security IoT Check: If room has Arrears (Tunggakan), block power turn on
             if (room.statusBayar === 'Tunggakan' && room.powerStatus === 'OFF') {
-                showToast(
-                    'IoT Safety Interlock', 
-                    `Kamar ${room.noKamar} ditangguhkan! Selesaikan tunggakan untuk menyalakan daya.`, 
-                    'error'
-                );
-                writeLog('INTERLOCK_BLOCK', `Gagal menyalakan daya Kamar ${room.noKamar} karena menunggak.`);
+                showToast('Interlock Pengaman', `Tagihan Kamar ${room.noKamar} tertunggak! Lakukan pembayaran dahulu.`, 'error');
                 return;
             }
 
             const newStatus = room.powerStatus === 'ON' ? 'OFF' : 'ON';
-            
-            // UI optimism update
             room.powerStatus = newStatus;
             renderRooms();
 
             try {
                 const response = await callBackend('togglePower', { roomId, powerStatus: newStatus });
                 if (response.success) {
-                    showToast('IoT Berhasil', `Perangkat ${room.deviceId} diset ke ${newStatus}`);
-                    writeLog(`SONOFF_API_${newStatus}`, `Kirim POST -> ${room.deviceId} status: ${newStatus.toLowerCase()}. Payload: ${JSON.stringify(response.payload || {})}`);
+                    showToast('Sukses IoT', `Device ${room.deviceId} beralih ke ${newStatus}`);
+                    writeLog(`SWITCH_${newStatus}`, `Relay ${room.deviceId} diset ${newStatus}.`);
                 } else {
                     room.powerStatus = newStatus === 'ON' ? 'OFF' : 'ON';
                     renderRooms();
-                    showToast('IoT Gagal', response.message || 'Gagal mengubah status daya.', 'error');
+                    showToast('Gagal IoT', response.message || 'Gagal mengubah status relay.', 'error');
                 }
             } catch(e) {
                 room.powerStatus = newStatus === 'ON' ? 'OFF' : 'ON';
@@ -886,30 +952,47 @@
         document.getElementById('search-room').addEventListener('input', renderRooms);
         document.getElementById('filter-status').addEventListener('change', renderRooms);
 
-        const roomModal = document.getElementById('room-modal');
-        const roomForm = document.getElementById('room-form');
+        // NAVIGATION BUTTONS CLICKS
+        const navRoomsBtn = document.getElementById('nav-rooms-btn');
+        const navAdminsBtn = document.getElementById('nav-admins-btn');
+        const sectionRooms = document.getElementById('section-rooms');
+        const sectionAdmins = document.getElementById('section-admins');
+
+        navRoomsBtn.addEventListener('click', () => {
+            navRoomsBtn.className = "px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2";
+            navAdminsBtn.className = "px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2";
+            sectionRooms.classList.remove('hidden');
+            sectionAdmins.classList.add('hidden');
+        });
+
+        navAdminsBtn.addEventListener('click', async () => {
+            navAdminsBtn.className = "px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2";
+            navRoomsBtn.className = "px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2";
+            sectionRooms.classList.add('hidden');
+            sectionAdmins.classList.remove('hidden');
+
+            const adminsResult = await callBackend('getAdmins');
+            if (adminsResult.success) adminsData = adminsResult.admins;
+            renderAdmins();
+        });
+
+        // MODALS HANDLER (KAMAR)
+        const roomModal = document.getElementById('room-modal'), roomForm = document.getElementById('room-form');
 
         function openAddModal() {
             document.getElementById('modal-title').textContent = "Tambah Kamar Baru";
             document.getElementById('modal-room-id').value = '';
             roomForm.reset();
-            
             const randomID = Math.floor(100 + Math.random() * 900);
             document.getElementById('modal-no-kamar').value = randomID;
             document.getElementById('modal-device-id').value = 'SONOFF_' + randomID;
             document.getElementById('modal-power-badge-container').classList.add('hidden');
-
-            roomModal.classList.remove('hidden');
-            setTimeout(() => {
-                roomModal.classList.add('opacity-100');
-                roomModal.querySelector('.transform').classList.remove('scale-95');
-            }, 50);
+            showModal(roomModal);
         }
 
         function openEditModal(roomId) {
             const room = roomsData.find(r => r.roomId === roomId);
             if (!room) return;
-
             document.getElementById('modal-title').textContent = `Ubah Kamar ${room.noKamar}`;
             document.getElementById('modal-room-id').value = room.roomId;
             document.getElementById('modal-no-kamar').value = room.noKamar;
@@ -921,33 +1004,29 @@
             
             const badge = document.getElementById('modal-power-badge');
             badge.textContent = room.powerStatus;
-            if (room.powerStatus === 'ON') {
-                badge.className = 'px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400';
-            } else {
-                badge.className = 'px-2.5 py-1 rounded-full font-bold bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400';
-            }
+            badge.className = room.powerStatus === 'ON' ? 'px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-600' : 'px-2.5 py-1 rounded-full font-bold bg-red-100 text-red-600';
             document.getElementById('modal-power-badge-container').classList.remove('hidden');
+            showModal(roomModal);
+        }
 
-            roomModal.classList.remove('hidden');
+        function showModal(modalEl) {
+            modalEl.classList.remove('hidden');
             setTimeout(() => {
-                roomModal.classList.add('opacity-100');
-                roomModal.querySelector('.transform').classList.remove('scale-95');
+                modalEl.classList.add('opacity-100');
+                modalEl.querySelector('.transform').classList.remove('scale-95');
             }, 50);
         }
 
-        function closeModal() {
-            roomModal.classList.remove('opacity-100');
-            roomModal.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => {
-                roomModal.classList.add('hidden');
-            }, 300);
+        function hideModal(modalEl) {
+            modalEl.classList.remove('opacity-100');
+            modalEl.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => modalEl.classList.add('hidden'), 300);
         }
 
         document.getElementById('open-add-room-btn').addEventListener('click', openAddModal);
-        document.getElementById('close-modal-btn').addEventListener('click', closeModal);
-        document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+        document.getElementById('close-modal-btn').addEventListener('click', () => hideModal(roomModal));
+        document.getElementById('cancel-modal-btn').addEventListener('click', () => hideModal(roomModal));
 
-        // SAVE / UPDATE ROOM ACTION
         roomForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const roomId = document.getElementById('modal-room-id').value;
@@ -958,152 +1037,192 @@
             const tanggalJatuhTempo = document.getElementById('modal-jatuh-tempo').value;
             const statusBayar = document.getElementById('modal-status').value;
 
-            let updatedRoom = {};
-
+            let power = (statusBayar === 'Tunggakan' || statusBayar === 'Kosong') ? 'OFF' : 'ON';
             if (roomId) {
                 const existing = roomsData.find(r => r.roomId === roomId);
-                let power = existing ? existing.powerStatus : 'ON';
-                if (statusBayar === 'Tunggakan') {
-                    power = 'OFF';
-                }
-                
-                updatedRoom = {
-                    roomId,
-                    noKamar,
-                    deviceId,
-                    namaPenyewa,
-                    tarif,
-                    tanggalJatuhTempo,
-                    statusBayar,
-                    powerStatus: power
-                };
-            } else {
-                const newId = String(Date.now());
-                const initPower = (statusBayar === 'Tunggakan' || statusBayar === 'Kosong') ? 'OFF' : 'ON';
-                
-                updatedRoom = {
-                    roomId: newId,
-                    noKamar,
-                    deviceId,
-                    namaPenyewa,
-                    tarif,
-                    tanggalJatuhTempo,
-                    statusBayar,
-                    powerStatus: initPower
-                };
+                power = existing ? existing.powerStatus : 'ON';
+                if (statusBayar === 'Tunggakan') power = 'OFF';
             }
 
-            closeModal();
-            showToast('Menyimpan Data', 'Sedang mengirim pembaruan ke database...', 'warning');
+            const updatedRoom = {
+                roomId: roomId || String(Date.now()),
+                noKamar, deviceId, namaPenyewa, tarif, tanggalJatuhTempo, statusBayar, powerStatus: power
+            };
+
+            hideModal(roomModal);
+            showToast('Menyimpan...', 'Menyelaraskan data kamar dengan database...', 'warning');
 
             try {
                 const response = await callBackend('saveKamar', { room: updatedRoom });
                 if (response.success) {
                     const freshData = await callBackend('getKamarData');
-                    if (freshData.success) {
-                        roomsData = freshData.rooms;
-                    } else {
-                        const idx = roomsData.findIndex(r => r.roomId === updatedRoom.roomId);
-                        if (idx !== -1) roomsData[idx] = updatedRoom;
-                        else roomsData.push(updatedRoom);
-                    }
+                    if (freshData.success) roomsData = freshData.rooms;
                     renderRooms();
-                    showToast('Berhasil Disimpan', `Kamar ${noKamar} telah sinkron.`);
-                    writeLog('DB_SYNC_OK', `Data kamar ${noKamar} disimpan.`);
-                } else {
-                    showToast('Gagal Menyimpan', response.message || 'Penyimpanan ditolak database.', 'error');
+                    showToast('Tersimpan', `Kamar ${noKamar} berhasil diselaraskan.`);
+                    writeLog('DB_SYNC_OK', `Data kamar ${noKamar} berhasil disimpan.`);
                 }
             } catch(err) {
-                showToast('Koneksi Lemah', 'Mengalami kegagalan koneksi.', 'error');
+                showToast('Koneksi Lemah', 'Penyimpanan terganggu.', 'error');
             }
         });
 
-        let roomToDeleteId = null;
+        // ADMIN MANAGEMENT MODALS (SUPERADMIN)
+        const adminModal = document.getElementById('admin-modal'), adminForm = document.getElementById('admin-form');
 
-        // Custom Delete Modal Trigger
+        function openAddAdminModal() {
+            document.getElementById('admin-modal-title').textContent = "Tambah Akun Admin";
+            document.getElementById('admin-modal-username').disabled = false;
+            adminForm.reset();
+            buildRoomsCheckboxList([]);
+            showModal(adminModal);
+        }
+
+        function openEditAdminModal(username) {
+            const admin = adminsData.find(a => a.username.toLowerCase() === username.toLowerCase());
+            if (!admin) return;
+            document.getElementById('admin-modal-title').textContent = `Ubah Akun ${admin.username}`;
+            document.getElementById('admin-modal-username').value = admin.username;
+            document.getElementById('admin-modal-username').disabled = true;
+            document.getElementById('admin-modal-password').value = admin.password;
+            document.getElementById('admin-modal-role').value = admin.role;
+            
+            const checkedRooms = admin.kamarDikelola ? admin.kamarDikelola.split(',').map(s => s.trim()) : [];
+            buildRoomsCheckboxList(checkedRooms);
+            showModal(adminModal);
+        }
+
+        function buildRoomsCheckboxList(checkedRooms) {
+            const container = document.getElementById('rooms-checkbox-list');
+            container.innerHTML = '';
+            
+            if (roomsData.length === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-400">Buat kamar terlebih dahulu.</span>`;
+                return;
+            }
+
+            roomsData.forEach(room => {
+                const isChecked = checkedRooms.includes(room.noKamar);
+                const wrapper = document.createElement('label');
+                wrapper.className = "flex items-center gap-3 text-xs font-semibold cursor-pointer text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-colors";
+                wrapper.innerHTML = `
+                    <input type="checkbox" name="assign-room" value="${room.noKamar}" ${isChecked ? 'checked' : ''} class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+                    <span>Kamar ${room.noKamar} (${room.namaPenyewa || 'Kosong'})</span>
+                `;
+                container.appendChild(wrapper);
+            });
+        }
+
+        document.getElementById('open-add-admin-btn').addEventListener('click', openAddAdminModal);
+        document.getElementById('close-admin-modal-btn').addEventListener('click', () => hideModal(adminModal));
+        document.getElementById('cancel-admin-modal-btn').addEventListener('click', () => hideModal(adminModal));
+
+        document.getElementById('admin-modal-role').addEventListener('change', (e) => {
+            const container = document.getElementById('rooms-assign-container');
+            if (e.target.value === 'Superadmin') {
+                container.classList.add('hidden');
+            } else {
+                container.classList.remove('hidden');
+            }
+        });
+
+        adminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('admin-modal-username').value.trim();
+            const password = document.getElementById('admin-modal-password').value.trim();
+            const role = document.getElementById('admin-modal-role').value;
+            
+            let kamarDikelola = 'all';
+            if (role !== 'Superadmin') {
+                const checkboxes = document.querySelectorAll('input[name="assign-room"]:checked');
+                const selected = Array.from(checkboxes).map(cb => cb.value);
+                kamarDikelola = selected.join(',');
+            }
+
+            const adminData = { username, password, role, kamarDikelola };
+            hideModal(adminModal);
+            showToast('Menyimpan Admin', 'Memproses kredensial baru...', 'warning');
+
+            try {
+                const response = await callBackend('saveAdmin', { adminData });
+                if (response.success) {
+                    const freshAdmins = await callBackend('getAdmins');
+                    if (freshAdmins.success) adminsData = freshAdmins.admins;
+                    renderAdmins();
+                    showToast('Sukses', `Konfigurasi admin "${username}" disimpan.`);
+                }
+            } catch(e) {
+                showToast('Gagal Menyimpan', 'Terjadi kesalahan sistem.', 'error');
+            }
+        });
+
+        // SECURE DELETE CONFIRMATION MODAL HANDLERS
+        let deleteType = null; 
+        let deleteId = null;
+
         window.deleteRoom = function(roomId) {
             const room = roomsData.find(r => r.roomId === roomId);
             if (!room) return;
-
-            roomToDeleteId = roomId;
-            document.getElementById('delete-room-name').textContent = `Kamar ${room.noKamar}`;
-            
-            const deleteModal = document.getElementById('delete-confirm-modal');
-            deleteModal.classList.remove('hidden');
-            setTimeout(() => {
-                deleteModal.classList.add('opacity-100');
-                deleteModal.querySelector('.transform').classList.remove('scale-95');
-            }, 50);
+            deleteType = 'kamar';
+            deleteId = roomId;
+            document.getElementById('delete-target-name').textContent = `Kamar ${room.noKamar}`;
+            showModal(document.getElementById('delete-confirm-modal'));
         };
 
-        // Cancel Delete Event Binding
+        window.deleteAdminAccount = function(username) {
+            if (username.toLowerCase() === 'superadmin') {
+                showToast('Aksi Ilegal', 'Akun Superadmin Utama tidak dapat dihapus!', 'error');
+                return;
+            }
+            deleteType = 'admin';
+            deleteId = username;
+            document.getElementById('delete-target-name').textContent = `Akun Admin "${username}"`;
+            showModal(document.getElementById('delete-confirm-modal'));
+        };
+
         document.getElementById('cancel-delete-btn').addEventListener('click', () => {
-            const deleteModal = document.getElementById('delete-confirm-modal');
-            deleteModal.classList.remove('opacity-100');
-            deleteModal.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => {
-                deleteModal.classList.add('hidden');
-            }, 300);
-            roomToDeleteId = null;
+            hideModal(document.getElementById('delete-confirm-modal'));
+            deleteType = null; deleteId = null;
         });
 
-        // Confirm Delete Event Binding
         document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-            if (roomToDeleteId) {
-                const room = roomsData.find(r => r.roomId === roomToDeleteId);
-                if (room) {
-                    showToast('Menghapus Kamar', `Sedang memproses penghapusan kamar ${room.noKamar}...`, 'warning');
-                    try {
-                        const response = await callBackend('deleteKamar', { roomId: roomToDeleteId });
-                        if (response.success) {
-                            roomsData = roomsData.filter(r => r.roomId !== roomToDeleteId);
-                            renderRooms();
-                            showToast('Kamar Dihapus', `Data kamar ${room.noKamar} telah dihilangkan dari sistem.`, 'warning');
-                            writeLog('DELETE_ROOM', `Kamar ${room.noKamar} telah dihapus.`);
-                        } else {
-                            showToast('Gagal Menghapus', response.message || 'Database menolak aksi hapus.', 'error');
-                        }
-                    } catch(e) {
-                        showToast('Error Koneksi', 'Gagal memproses ke database.', 'error');
-                    }
-                }
-            }
             const deleteModal = document.getElementById('delete-confirm-modal');
-            deleteModal.classList.remove('opacity-100');
-            deleteModal.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => {
-                deleteModal.classList.add('hidden');
-            }, 300);
-            roomToDeleteId = null;
+            hideModal(deleteModal);
+
+            if (deleteType === 'kamar' && deleteId) {
+                showToast('Menghapus Kamar', 'Memproses data ke server...', 'warning');
+                try {
+                    const response = await callBackend('deleteKamar', { roomId: deleteId });
+                    if (response.success) {
+                        roomsData = roomsData.filter(r => r.roomId !== deleteId);
+                        renderRooms();
+                        showToast('Berhasil Dihapus', 'Kamar berhasil dihapus dari database.');
+                        writeLog('DELETE_OK', `Kamar ID ${deleteId} dihapus.`);
+                    }
+                } catch(e) { showToast('Koneksi Error', 'Gagal memproses penghapusan.', 'error'); }
+            } else if (deleteType === 'admin' && deleteId) {
+                showToast('Menghapus Admin', 'Memproses penghapusan akun...', 'warning');
+                try {
+                    const response = await callBackend('deleteAdmin', { adminUsername: deleteId });
+                    if (response.success) {
+                        adminsData = adminsData.filter(a => a.username.toLowerCase() !== deleteId.toLowerCase());
+                        renderAdmins();
+                        showToast('Berhasil Dihapus', `Akun admin "${deleteId}" dihapus.`);
+                        writeLog('DELETE_ADMIN_OK', `Admin "${deleteId}" dihapus.`);
+                    } else {
+                        showToast('Aksi Gagal', response.message, 'error');
+                    }
+                } catch(e) { showToast('Koneksi Error', 'Gagal memproses ke server.', 'error'); }
+            }
+
+            deleteType = null; deleteId = null;
         });
 
         // INIT CONSOLE & CONNECTION
         window.onload = function() {
             updateConnectionStatusUI();
-            writeLog('SYSTEM_INIT', 'Inisialisasi sistem pemutus daya Sonoff berhasil.');
-            writeLog('SECURITY_CHECK', 'Otorisasi login diverifikasi. Mode siaga aktif.');
-            
-            if (isLiveMode) {
-                writeLog('LIVE_CONNECT', `Menghubungkan ke Google Sheets via: ${activeGasUrl.substring(0, 45)}...`);
-            } else {
-                writeLog('MOCK_MODE', 'Berjalan dalam mode Simulasi Offline.');
-            }
+            writeLog('SYSTEM_INIT', 'Inisialisasi sistem otorisasi multi-role berhasil.');
+            writeLog('SECURITY_CHECK', 'Mode penjagaan berlapis Superadmin/Admin aktif.');
         };
     </script>
-<script type="text/javascript">
-    // Menonaktifkan Klik Kanan
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-
-    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
-            (e.ctrlKey && e.key === 'u')) {
-            e.preventDefault();
-        }
-    });
-</script>
 </body>
 </html>
