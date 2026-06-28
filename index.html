@@ -523,20 +523,23 @@
 
         // API Fetch Router: Cerdas mendeteksi google.script.run terlebih dahulu, lalu fallback ke HTTP fetch
         async function callBackend(action, data = {}) {
-            // 1. Prioritaskan Eksekusi Native Google Apps Script (Bebas dari kendala CORS)
+            // 1. Prioritaskan Eksekusi Native Google Apps Script
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 return new Promise((resolve) => {
                     google.script.run
-                        .withSuccessHandler((res) => resolve(res))
+                        .withSuccessHandler((res) => {
+                            resolve(res);
+                        })
                         .withFailureHandler((err) => {
-                            writeLog('GAS_NATIVE_ERROR', err.message);
-                            resolve({ success: false, message: err.message });
+                            writeLog('GAS_NATIVE_ERROR', err.message || err);
+                            showToast('Native GAS Error', err.message || 'Kesalahan Server Apps Script', 'error');
+                            resolve({ success: false, message: err.message || String(err) });
                         })
                         .executeAction(action, data);
                 });
             }
 
-            // 2. Fallback ke API Fetch HTTP (Jika dijalankan dari luar server Google Apps Script)
+            // 2. Fallback ke API Fetch HTTP (CORS Safe)
             if (isLiveMode && activeGasUrl) {
                 try {
                     const payload = { action, ...data };
@@ -547,8 +550,22 @@
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) throw new Error(`HTTP Status: ${response.status}`);
-                    return await response.json();
+                    const responseText = await response.text();
+                    
+                    // Deteksi jika Google mengembalikan halaman error HTML (misal kegagalan izin akses spreadsheet)
+                    if (responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html')) {
+                        writeLog('API_HTTP_HTML_ERROR', 'Menerima respon HTML dari Google (indikasi salah konfigurasi izin Web App).');
+                        showToast('Izin Google Ditolak', 'Google Apps Script mengembalikan halaman HTML. Mohon deploy ulang dengan akses "Anyone"!', 'error');
+                        return handleMockAction(action, data);
+                    }
+
+                    try {
+                        const result = JSON.parse(responseText);
+                        return result;
+                    } catch(e) {
+                        writeLog('JSON_PARSE_ERROR', `Gagal memproses parsing JSON: ${responseText.substring(0, 100)}`);
+                        return handleMockAction(action, data);
+                    }
                 } catch (error) {
                     writeLog('API_HTTP_ERROR', `Pesan: ${error.message}`);
                     return handleMockAction(action, data);
@@ -1224,5 +1241,20 @@
             writeLog('SECURITY_CHECK', 'Mode penjagaan berlapis Superadmin/Admin aktif.');
         };
     </script>
+<script type="text/javascript">
+    // Menonaktifkan Klik Kanan
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Menonaktifkan Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+U)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) || 
+            (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>
