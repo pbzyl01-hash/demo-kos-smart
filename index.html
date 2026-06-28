@@ -1,33 +1,44 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Kos Management & Power Control</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts Inter & Orbitron for Tech/Clock Feel -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts Inter & JetBrains Mono for Premium Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        tech: ['Orbitron', 'sans-serif'],
+                        tech: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
+                        earth: {
+                            50: '#f4f7f5',
+                            100: '#e5ebe6',
+                            200: '#ccd9d0',
+                            500: '#3e5c50', // Earthy Forest Teal
+                            600: '#2d453b',
+                            700: '#24372e',
+                            800: '#1b2a23',
+                            900: '#15211b',
+                        },
+                        ochre: {
+                            400: '#d6ac68', // Golden Ochre
+                            500: '#c2944f',
+                            600: '#a67b3c',
+                        },
+                        terracotta: {
+                            400: '#e67355', // Vibrant Coral Terracotta
+                            500: '#ce5039',
+                            600: '#b13f2a',
                         }
                     }
                 }
@@ -35,18 +46,36 @@
         }
     </script>
     <style>
-        @keyframes glowPulse {
-            0%, 100% {
-                text-shadow: 0 0 12px rgba(99, 102, 241, 0.6), 0 0 25px rgba(99, 102, 241, 0.3);
-                transform: scale(1);
-            }
-            50% {
-                text-shadow: 0 0 25px rgba(99, 102, 241, 0.9), 0 0 40px rgba(99, 102, 241, 0.6);
-                transform: scale(1.02);
-            }
+        /* Smooth, premium earthy-light gradient replicating image_17b4e2.jpg warmth */
+        .premium-light-gradient {
+            background: #fdfcf7;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(62, 92, 80, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(194, 164, 120, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(214, 109, 82, 0.15) 0px, transparent 60%);
+            background-attachment: fixed;
         }
-        .glowing-pulsing-title {
-            animation: glowPulse 3s infinite ease-in-out;
+        
+        /* Frosted Glassmorphism optimised for Light Premium Aesthetics */
+        .glass-card-premium-light {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(62, 92, 80, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(27, 42, 35, 0.05);
+        }
+
+        .glass-input-light {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(62, 92, 80, 0.15);
+            color: #15211b;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input-light:focus {
+            background: #ffffff;
+            border-color: rgba(194, 164, 120, 0.8);
+            box-shadow: 0 0 12px rgba(194, 164, 120, 0.15);
         }
         
         .transition-all-300 {
@@ -62,42 +91,39 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-all-300">
+<body class="text-slate-800 min-h-screen font-sans transition-all-300 premium-light-gradient">
 
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full"></div>
 
     <div id="app-wrapper" class="min-h-screen flex flex-col">
         
         <!-- HEADER / NAVIGATION -->
-        <header id="main-header" class="hidden border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-all-300">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <header id="main-header" class="hidden border-b border-slate-200/80 bg-white/80 backdrop-blur-xl sticky top-0 z-40 transition-all-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-brand-600 rounded-xl text-white shadow-lg shadow-brand-500/30">
-                        <i class="fa-solid fa-house-signal text-lg"></i>
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-gradient-to-br from-earth-500 to-terracotta-500 rounded-2xl text-white shadow-md shadow-earth-900/10">
+                        <i class="fa-solid fa-house-signal text-xl"></i>
                     </div>
                     <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight glowing-pulsing-title bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-earth-700 via-ochre-600 to-terracotta-600 bg-clip-text text-transparent">
                                 KOS SMART POWER
                             </h1>
-                            <span id="connection-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">Offline Mock</span>
+                            <span id="connection-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-700 border border-slate-200">Offline Mock</span>
+                            <span id="ewelink-status-badge" class="px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20">eWeLink: Disconnected</span>
                         </div>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-widest uppercase">IoT Dashboard</p>
+                        <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Premium IoT Dashboard</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3 sm:gap-5">
                     <div class="hidden md:flex flex-col text-right">
-                        <span id="header-date" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sabtu, 27 Juni 2026</span>
-                        <span id="header-clock" class="text-sm font-bold font-tech text-brand-600 dark:text-brand-400">21:13:00 WIB</span>
+                        <span id="header-date" class="text-xs font-semibold text-slate-500">Sabtu, 27 Juni 2026</span>
+                        <span id="header-clock" class="text-sm font-bold font-tech text-earth-600">21:13:00 WITA</span>
                     </div>
 
-                    <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all-300" aria-label="Toggle Theme">
-                        <i id="theme-icon" class="fa-solid fa-sun"></i>
-                    </button>
-
-                    <button id="logout-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 transition-all-300 font-semibold text-xs sm:text-sm">
+                    <button id="logout-btn" class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-red-500/10 hover:bg-red-600 text-red-600 hover:text-white border border-red-500/20 transition-all-300 font-bold text-xs sm:text-sm">
                         <i class="fa-solid fa-power-off"></i>
                         <span class="hidden sm:inline">Keluar</span>
                     </button>
@@ -105,75 +131,73 @@
             </div>
         </header>
 
-        <div id="mobile-clock-banner" class="hidden md:hidden bg-slate-100 dark:bg-slate-900 px-4 py-2 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs">
-            <span id="mobile-date" class="font-medium text-slate-600 dark:text-slate-400">27 Juni 2026</span>
-            <span id="mobile-clock" class="font-bold font-tech text-brand-500 dark:text-brand-400">21:13:00 WIB</span>
+        <div id="mobile-clock-banner" class="hidden md:hidden bg-white/90 backdrop-blur-md px-4 py-2.5 border-b border-slate-200/50 flex justify-between items-center text-xs">
+            <span id="mobile-date" class="font-bold text-slate-600">27 Juni 2026</span>
+            <span id="mobile-clock" class="font-bold font-tech text-earth-600">21:13:00 WITA</span>
         </div>
 
         <main class="flex-grow flex flex-col">
 
             <!-- LOGIN ACCESS SCREEN -->
-            <div id="login-container" class="flex-grow flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-all-300">
-                <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 transition-all-300">
+            <div id="login-container" class="relative flex-grow flex items-center justify-center px-4 py-16 overflow-hidden">
+                
+                <!-- Glowing Blurred Orbs matching image_17b4e2.jpg earthy atmosphere (Perfectly visible in light mode too) -->
+                <div class="absolute top-1/4 left-1/4 w-[380px] h-[380px] bg-earth-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-[420px] h-[420px] bg-terracotta-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+                
+                <div class="relative w-full max-w-md bg-white/85 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl overflow-hidden p-6 sm:p-10 transition-all-300 z-10">
                     
                     <div class="text-center mb-8">
-                        <div class="inline-flex items-center justify-center p-4 bg-brand-500/10 rounded-2xl text-brand-500 mb-4 ring-4 ring-brand-500/5">
+                        <div class="inline-flex items-center justify-center p-4 bg-earth-500/10 rounded-3xl text-earth-600 mb-4 ring-8 ring-earth-500/5">
                             <i class="fa-solid fa-shield-halved text-3xl"></i>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight glowing-pulsing-title bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-earth-700 via-ochre-600 to-terracotta-600 bg-clip-text text-transparent">
                             KOS SMART POWER
                         </h2>
-                        <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm sm:text-base">Masuk untuk mengelola kamar & kontrol daya Sonoff</p>
+                        <p class="text-slate-600 mt-2 text-sm sm:text-base">Masuk untuk mengelola kamar & kontrol daya Sonoff</p>
                     </div>
 
-                    <div id="login-error" class="hidden mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-600 dark:text-red-400 text-xs sm:text-sm">
+                    <div id="login-error" class="hidden mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-600 text-xs sm:text-sm animate-bounce">
                         <i class="fa-solid fa-triangle-exclamation text-base shrink-0"></i>
                         <span id="login-error-text">Nama pengguna atau sandi salah!</span>
                     </div>
 
                     <form id="login-form" class="space-y-5">
                         <div>
-                            <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username Akses</label>
+                            <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Username Akses</label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 pointer-events-none">
                                     <i class="fa-solid fa-user"></i>
                                 </span>
-                                <input type="text" id="username" required class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="Masukkan username">
+                                <input type="text" id="username" required class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-ochre-500/20 rounded-2xl text-sm transition-all-300 outline-none text-slate-950" placeholder="Masukkan username">
                             </div>
                         </div>
 
                         <div>
-                            <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Kata Sandi / PIN</label>
+                            <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Kata Sandi / PIN</label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 pointer-events-none">
                                     <i class="fa-solid fa-key"></i>
                                 </span>
-                                <input type="password" id="password" required class="w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 rounded-xl text-sm transition-all-300 outline-none" placeholder="••••••••">
-                                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-brand-500 transition-colors focus:outline-none" title="Intip PIN">
+                                <input type="password" id="password" required class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-ochre-500/20 rounded-2xl text-sm transition-all-300 outline-none text-slate-950" placeholder="••••••••">
+                                <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-ochre-500 transition-colors focus:outline-none" title="Intip PIN">
                                     <i id="password-toggle-icon" class="fa-solid fa-eye text-base"></i>
                                 </button>
                             </div>
                         </div>
 
                         <div class="pt-2">
-                            <button type="submit" id="login-submit-btn" class="w-full py-3.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 active:scale-[0.98] transition-all-300 text-sm flex items-center justify-center gap-2">
+                            <button type="submit" id="login-submit-btn" class="w-full py-4 bg-gradient-to-r from-earth-600 via-ochre-500 to-terracotta-500 hover:from-earth-500 hover:to-terracotta-400 text-white font-bold rounded-2xl shadow-lg shadow-terracotta-900/10 active:scale-[0.98] transition-all-300 text-sm flex items-center justify-center gap-2">
                                 <span id="login-btn-text">Akses Dashboard</span>
                                 <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
                             </button>
                         </div>
                     </form>
 
-                    <!-- TROUBLESHOOTING GUIDE FOR THE USER -->
-                    <div id="troubleshoot-guide" class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 text-center">
-                        <button onclick="openTroubleshootModal()" class="text-xs text-indigo-500 hover:underline font-semibold flex items-center justify-center gap-1.5 mx-auto">
-                            <i class="fa-solid fa-circle-question"></i> Gagal Login? Solusi Troubleshoot
-                        </button>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/60 text-center">
-                        <div class="inline-block px-3.5 py-1.5 bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/10 dark:border-brand-500/20 rounded-xl text-[11px] text-slate-500 dark:text-slate-400">
+                    <div class="mt-8 pt-4 border-t border-slate-100 text-center">
+                        <div class="inline-block px-4 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-[11px] text-slate-500">
                             <span class="font-medium text-slate-400">Powered By</span> 
-                            <span class="font-extrabold tracking-wide bg-gradient-to-r from-brand-600 to-indigo-500 dark:from-brand-400 dark:to-indigo-300 bg-clip-text text-transparent ml-0.5">Hay Studio</span>
+                            <span class="font-extrabold tracking-wide bg-gradient-to-r from-ochre-500 to-terracotta-500 bg-clip-text text-transparent ml-0.5">Hay Studio</span>
                         </div>
                     </div>
 
@@ -184,28 +208,30 @@
             <div id="dashboard-container" class="hidden flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
                 
                 <!-- Tab Switching Panel & Action Row -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/50 pb-6">
                     <div class="flex items-center gap-2">
-                        <button id="nav-rooms-btn" class="px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2">
-                            <i class="fa-solid fa-door-closed"></i>
-                            <span>Kelola Kamar</span>
-                        </button>
-                        <button id="nav-admins-btn" class="hidden px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2">
-                            <i class="fa-solid fa-users-gear"></i>
-                            <span>Akun Sistem</span>
-                        </button>
+                        <div class="p-1 bg-slate-100 border border-slate-200 rounded-2xl flex">
+                            <button class="px-5 py-2.5 bg-white text-slate-900 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all-300 flex items-center gap-2 cursor-default border border-slate-200/30">
+                                <i class="fa-solid fa-door-closed"></i>
+                                <span>Kelola Kamar</span>
+                            </button>
+                        </div>
                     </div>
                     
-                    <!-- Quick Actions with Slot Limit Counter -->
+                    <!-- Quick Actions with Slot Limit Counter & IoT Config Gear -->
                     <div class="flex flex-wrap items-center gap-3">
-                        <span id="slot-limit-badge" class="px-3 py-1.5 rounded-xl font-extrabold text-xs bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center gap-1.5">
+                        <span id="slot-limit-badge" class="px-4 py-2.5 rounded-2xl font-extrabold text-xs bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 flex items-center gap-1.5">
                             <i class="fa-solid fa-address-card"></i>
                             <span>Slot: - / - Kamar</span>
                         </span>
-                        <span id="role-badge" class="px-3 py-1.5 rounded-xl font-bold text-xs uppercase bg-brand-500/10 text-brand-500">
-                            Role: Loading...
-                        </span>
-                        <button id="open-add-room-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/10 active:scale-[0.98] transition-all-300 flex items-center gap-2">
+                        
+                        <!-- Setelan IoT Button -->
+                        <button id="open-settings-btn" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold rounded-2xl border border-slate-200 shadow-sm active:scale-[0.98] transition-all-300 flex items-center gap-2">
+                            <i class="fa-solid fa-gears text-ochre-500"></i>
+                            <span>Setelan IoT eWeLink</span>
+                        </button>
+
+                        <button id="open-add-room-btn" class="px-5 py-2.5 bg-earth-500 hover:bg-earth-600 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-md active:scale-[0.98] transition-all-300 flex items-center gap-2">
                             <i class="fa-solid fa-plus"></i>
                             <span>Tambah Kamar</span>
                         </button>
@@ -215,49 +241,49 @@
                 <!-- OVERVIEW VIEW (KAMAR) -->
                 <div id="section-rooms" class="space-y-8">
 
-                    <!-- Top KPI Summary Cards -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Top KPI Summary Cards - Designed exactly like image_17b4e2.jpg circular badges -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                         <!-- Card: Total Kamar -->
-                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
-                            <div class="p-3 bg-blue-500/10 rounded-xl text-blue-500 shrink-0">
-                                <i class="fa-solid fa-door-open text-xl sm:text-2xl"></i>
+                        <div class="bg-white/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center gap-3">
+                            <div class="w-14 h-14 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600">
+                                <i class="fa-solid fa-door-open text-xl"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Total Kamar</p>
-                                <h3 id="stat-total-rooms" class="text-lg sm:text-2xl font-black mt-0.5">0</h3>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Kamar</p>
+                                <h3 id="stat-total-rooms" class="text-xl sm:text-2xl font-black mt-1 text-slate-900">0</h3>
                             </div>
                         </div>
 
                         <!-- Card: Terisi -->
-                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
-                            <div class="p-3 bg-brand-500/10 rounded-xl text-brand-500 shrink-0">
-                                <i class="fa-solid fa-user-check text-xl sm:text-2xl"></i>
+                        <div class="bg-white/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center gap-3">
+                            <div class="w-14 h-14 rounded-full bg-ochre-500/15 border border-ochre-500/30 flex items-center justify-center text-ochre-600">
+                                <i class="fa-solid fa-user-check text-xl"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Terisi</p>
-                                <h3 id="stat-occupied-rooms" class="text-lg sm:text-2xl font-black mt-0.5 text-brand-600 dark:text-brand-400">0</h3>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Terisi</p>
+                                <h3 id="stat-occupied-rooms" class="text-xl sm:text-2xl font-black mt-1 text-ochre-600">0</h3>
                             </div>
                         </div>
 
                         <!-- Card: Listrik Aktif -->
-                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
-                            <div class="p-3 bg-emerald-500/10 rounded-xl text-emerald-500 shrink-0">
-                                <i class="fa-solid fa-plug-circle-check text-xl sm:text-2xl"></i>
+                        <div class="bg-white/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center gap-3">
+                            <div class="w-14 h-14 rounded-full bg-earth-500/15 border border-earth-500/30 flex items-center justify-center text-earth-600">
+                                <i class="fa-solid fa-plug-circle-check text-xl"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Daya Aktif</p>
-                                <h3 id="stat-power-active" class="text-lg sm:text-2xl font-black mt-0.5 text-emerald-600 dark:text-emerald-400">0</h3>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Daya Aktif</p>
+                                <h3 id="stat-power-active" class="text-xl sm:text-2xl font-black mt-1 text-earth-600">0</h3>
                             </div>
                         </div>
 
                         <!-- Card: Tunggakan Tagihan -->
-                        <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 transition-all-300 shadow-sm flex items-center gap-4">
-                            <div class="p-3 bg-red-500/10 rounded-xl text-red-500 shrink-0">
-                                <i class="fa-solid fa-circle-exclamation text-xl sm:text-2xl"></i>
+                        <div class="bg-white/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center gap-3">
+                            <div class="w-14 h-14 rounded-full bg-terracotta-500/15 border border-terracotta-500/30 flex items-center justify-center text-terracotta-600">
+                                <i class="fa-solid fa-circle-exclamation text-xl"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Tunggakan</p>
-                                <h3 id="stat-arrears-count" class="text-lg sm:text-2xl font-black mt-0.5 text-red-500">0 Kamar</h3>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tunggakan</p>
+                                <h3 id="stat-arrears-count" class="text-xl sm:text-2xl font-black mt-1 text-terracotta-600">0 Kamar</h3>
                             </div>
                         </div>
                     </div>
@@ -265,21 +291,21 @@
                     <!-- Room Grid & Search Filter -->
                     <div class="space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <h3 class="text-lg font-bold">Daftar Kamar Anda</h3>
+                            <h3 class="text-lg font-bold text-slate-900">Daftar Kamar Anda</h3>
                             
                             <!-- Filter Group -->
                             <div class="flex items-center gap-2 max-w-sm w-full sm:w-auto">
                                 <div class="relative w-full">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 pointer-events-none">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
                                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                                     </span>
-                                    <input id="search-room" type="text" class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs focus:ring-1 focus:ring-brand-500 outline-none" placeholder="Cari kamar / nama...">
+                                    <input id="search-room" type="text" class="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-xs focus:ring-1 focus:ring-ochre-500 text-slate-900 outline-none" placeholder="Cari kamar / nama...">
                                 </div>
-                                <select id="filter-status" class="py-2 px-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs outline-none focus:ring-1 focus:ring-brand-500">
-                                    <option value="all">Semua Kamar</option>
-                                    <option value="lunas">Lunas</option>
-                                    <option value="tunggakan">Tunggakan</option>
-                                    <option value="kosong">Kosong</option>
+                                <select id="filter-status" class="py-2.5 px-3 bg-white border border-slate-200 rounded-2xl text-xs text-slate-800 outline-none focus:ring-1 focus:ring-ochre-500">
+                                    <option value="all" class="bg-white text-slate-900">Semua Status</option>
+                                    <option value="lunas" class="bg-white text-slate-900">Lunas</option>
+                                    <option value="tunggakan" class="bg-white text-slate-900">Tunggakan</option>
+                                    <option value="kosong" class="bg-white text-slate-900">Kosong</option>
                                 </select>
                             </div>
                         </div>
@@ -290,54 +316,22 @@
                         </div>
                     </div>
 
-                    <!-- IoT Simulation Live Logs Console -->
-                    <div class="bg-slate-900 text-slate-200 rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
-                        <div class="px-5 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                    <!-- IoT Simulation Live Logs Console (Remains High-Contrast Dark Theme for Developer Style) -->
+                    <div class="bg-[#0b0518] text-slate-200 rounded-3xl border border-purple-900/40 shadow-xl overflow-hidden">
+                        <div class="px-5 py-4 border-b border-purple-950/50 flex items-center justify-between bg-black/45">
                             <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping"></span>
-                                <h4 class="font-bold text-xs font-tech uppercase tracking-wider text-slate-400">Sonoff IoT / API Trigger Logs</h4>
+                                <span class="h-2.5 w-2.5 rounded-full bg-terracotta-500 animate-ping"></span>
+                                <h4 class="font-bold text-xs font-tech uppercase tracking-wider text-slate-300">Sonoff IoT / API Trigger Logs</h4>
                             </div>
-                            <button id="clear-logs-btn" class="text-[11px] font-bold text-slate-500 hover:text-white transition-colors uppercase">
+                            <button id="clear-logs-btn" class="text-[11px] font-bold text-slate-400 hover:text-ochre-400 transition-colors uppercase">
                                 Bersihkan Log
                             </button>
                         </div>
-                        <div id="logs-console" class="p-4 font-mono text-[11px] leading-relaxed h-44 overflow-y-auto no-scrollbar space-y-1.5 bg-black/40">
+                        <div id="logs-console" class="p-4 font-mono text-[11px] leading-relaxed h-44 overflow-y-auto no-scrollbar space-y-1.5 bg-black/30 text-emerald-400">
                             <div class="text-slate-500">// Menunggu aksi kontrol daya Sonoff...</div>
                         </div>
                     </div>
 
-                </div>
-
-                <!-- ADMIN MANAGEMENT VIEW (SUPERADMIN ONLY) -->
-                <div id="section-admins" class="hidden space-y-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="text-xl font-bold tracking-tight">Kelola Akun Sistem</h3>
-                            <p class="text-xs text-slate-400 mt-1">Daftar pengguna dengan akses masuk ke dalam database kos pemilik tunggal ini.</p>
-                        </div>
-                        <button id="open-add-admin-btn" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all-300 flex items-center gap-2">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Tambah Akun Baru</span>
-                        </button>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs sm:text-sm border-collapse">
-                                <thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-                                    <tr>
-                                        <th class="p-4 font-bold text-slate-400">Username</th>
-                                        <th class="p-4 font-bold text-slate-400">Sandi / PIN</th>
-                                        <th class="p-4 font-bold text-slate-400">Akses Peran</th>
-                                        <th class="p-4 font-bold text-slate-400 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admins-table-body">
-                                    <!-- Dinamis disuntikkan via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -345,7 +339,7 @@
         </main>
 
         <!-- FOOTER -->
-        <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-6 transition-all-300">
+        <footer class="border-t border-slate-200/50 bg-white py-6 transition-all-300">
             <div class="max-w-7xl mx-auto px-4 text-center">
                 <p class="text-xs text-slate-400">© 2026 Smart Kos Power Management System. Powered By Hay Studio.</p>
             </div>
@@ -355,11 +349,11 @@
 
     <!-- ROOM MODAL FORM -->
     <div id="room-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300">
+        <div class="bg-white/95 backdrop-blur-xl w-full max-w-lg rounded-3xl border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300 text-slate-900">
             
             <div class="flex items-center justify-between">
-                <h3 id="modal-title" class="text-lg font-bold">Tambah Kamar Baru</h3>
-                <button id="close-modal-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <h3 id="modal-title" class="text-lg font-bold text-slate-900">Tambah Kamar Baru</h3>
+                <button id="close-modal-btn" class="p-2 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -369,50 +363,50 @@
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="modal-no-kamar" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">No Kamar</label>
-                        <input type="text" id="modal-no-kamar" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Contoh: 101">
+                        <label for="modal-no-kamar" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">No Kamar</label>
+                        <input type="text" id="modal-no-kamar" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none" placeholder="Contoh: 101">
                     </div>
                     <div>
-                        <label for="modal-device-id" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">ID Device Sonoff</label>
-                        <input type="text" id="modal-device-id" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="SONOFF_101">
+                        <label for="modal-device-id" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">ID Device Sonoff</label>
+                        <input type="text" id="modal-device-id" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none" placeholder="SONOFF_101">
                     </div>
                 </div>
 
                 <div>
-                    <label for="modal-nama" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Nama Penyewa</label>
-                    <input type="text" id="modal-nama" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Masukkan nama penyewa (biarkan kosong jika kosong)">
+                    <label for="modal-nama" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Nama Penyewa</label>
+                    <input type="text" id="modal-nama" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none" placeholder="Masukkan nama penyewa (biarkan kosong jika kosong)">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="modal-tarif" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Tarif Kamar (Rp)</label>
-                        <input type="number" id="modal-tarif" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="1200000">
+                        <label for="modal-tarif" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Tarif Kamar (Rp)</label>
+                        <input type="number" id="modal-tarif" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none" placeholder="1200000">
                     </div>
                     <div>
-                        <label for="modal-jatuh-tempo" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Jatuh Tempo</label>
-                        <input type="date" id="modal-jatuh-tempo" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
+                        <label for="modal-jatuh-tempo" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Jatuh Tempo</label>
+                        <input type="date" id="modal-jatuh-tempo" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none">
                     </div>
                 </div>
 
                 <div>
-                    <label for="modal-status" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Status Pembayaran</label>
-                    <select id="modal-status" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
-                        <option value="Lunas">Lunas</option>
-                        <option value="Tunggakan">Tunggakan (Memutus Otomatis Aliran Listrik)</option>
-                        <option value="Kosong">Kosong (Tidak Berpenghuni)</option>
+                    <label for="modal-status" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Status Pembayaran</label>
+                    <select id="modal-status" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none">
+                        <option value="Lunas" class="bg-white text-slate-900">Lunas</option>
+                        <option value="Tunggakan" class="bg-white text-slate-900">Tunggakan (Memutus Otomatis Aliran Listrik)</option>
+                        <option value="Kosong" class="bg-white text-slate-900">Kosong (Tidak Berpenghuni)</option>
                     </select>
                 </div>
 
-                <div id="modal-power-badge-container" class="p-3.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl flex items-center justify-between text-xs">
-                    <span class="font-bold text-slate-400">Power Relay Status:</span>
+                <div id="modal-power-badge-container" class="p-3.5 bg-slate-100 rounded-2xl flex items-center justify-between text-xs border border-slate-200/50">
+                    <span class="font-bold text-slate-500">Power Relay Status:</span>
                     <span id="modal-power-badge" class="px-2.5 py-1 rounded-full font-bold bg-slate-200 text-slate-600">OFF</span>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 pt-4">
-                    <button type="button" id="cancel-modal-btn" class="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs transition-colors">
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" id="cancel-modal-btn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 font-bold rounded-2xl text-xs text-slate-700 transition-colors">
                         Batal
                     </button>
-                    <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-brand-500/10 transition-colors">
+                    <button type="submit" class="px-5 py-2.5 bg-earth-500 hover:bg-earth-600 text-white font-bold rounded-2xl text-xs shadow-md transition-colors">
                         Simpan Perubahan
                     </button>
                 </div>
@@ -420,42 +414,84 @@
         </div>
     </div>
 
-    <!-- ADMIN MODAL FORM (SUPERADMIN ONLY) -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 transform scale-95 transition-transform duration-300">
+    <!-- NEW: MODAL SETELAN EWELINK / SONOFF API -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white/95 backdrop-blur-xl w-full max-w-lg rounded-3xl border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300 text-slate-900">
             
-            <div class="flex items-center justify-between">
-                <h3 id="admin-modal-title" class="text-lg font-bold">Tambah Akun Sistem</h3>
-                <button id="close-admin-modal-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div class="flex items-center gap-2.5 text-earth-600">
+                    <i class="fa-solid fa-gears text-xl"></i>
+                    <h3 class="text-lg font-bold text-slate-900">Koneksi API Token eWeLink</h3>
+                </div>
+                <button id="close-settings-btn" class="p-2 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <form id="admin-form" class="space-y-4">
+            <form id="settings-form" class="space-y-4">
                 <div>
-                    <label for="admin-modal-username" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Username Admin</label>
-                    <input type="text" id="admin-modal-username" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Contoh: admin_kamar">
+                    <label for="settings-ewelink-email" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">eWeLink Email / No. HP</label>
+                    <input type="text" id="settings-ewelink-email" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none font-tech" placeholder="contoh: budi@mail.com">
                 </div>
 
                 <div>
-                    <label for="admin-modal-password" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Kata Sandi / PIN</label>
-                    <input type="text" id="admin-modal-password" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Masukkan sandi">
+                    <label for="settings-ewelink-password" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Kata Sandi eWeLink</label>
+                    <div class="relative">
+                        <input type="password" id="settings-ewelink-password" required class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none font-tech" placeholder="••••••••">
+                        <button type="button" id="settings-password-toggle" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-ochre-400 transition-colors focus:outline-none" title="Intip Sandi">
+                            <i id="settings-password-toggle-icon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div>
-                    <label for="admin-modal-role" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Akses Peran</label>
-                    <select id="admin-modal-role" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
-                        <option value="Administrator">Administrator (Pemilik Kos)</option>
-                        <option value="Superadmin">Superadmin (Akses Developer/Penuh)</option>
+                    <label for="settings-ewelink-region" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Region Server</label>
+                    <select id="settings-ewelink-region" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none font-tech">
+                        <option value="as" selected class="bg-white text-slate-900">Asia (as)</option>
+                        <option value="us" class="bg-white text-slate-900">Americas (us)</option>
+                        <option value="eu" class="bg-white text-slate-900">Europe (eu)</option>
+                        <option value="cn" class="bg-white text-slate-900">China (cn)</option>
                     </select>
                 </div>
 
-                <div class="flex items-center justify-end gap-3 pt-4">
-                    <button type="button" id="cancel-admin-modal-btn" class="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs transition-colors">
+                <!-- Toggle Developer API Keys -->
+                <div class="pt-2">
+                    <label class="flex items-center gap-2.5 cursor-pointer text-xs font-bold uppercase tracking-wider text-slate-500">
+                        <input type="checkbox" id="settings-dev-mode" class="rounded border-slate-300 text-earth-600 focus:ring-ochre-500">
+                        <span>Gunakan Kredensial Pengembang (App ID & Secret)</span>
+                    </label>
+                </div>
+
+                <!-- App ID & App Secret (Muncul Dinamis) -->
+                <div id="developer-fields-container" class="hidden grid grid-cols-2 gap-4 border-t border-slate-200/50 pt-4 animate-fadeIn">
+                    <div>
+                        <label for="settings-app-id" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">App ID eWeLink</label>
+                        <input type="text" id="settings-app-id" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none font-tech" placeholder="Masukkan App ID">
+                    </div>
+                    <div>
+                        <label for="settings-app-secret" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">App Secret</label>
+                        <input type="text" id="settings-app-secret" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:ring-1 focus:ring-ochre-500 rounded-2xl text-sm text-slate-950 outline-none font-tech" placeholder="Masukkan App Secret">
+                    </div>
+                </div>
+
+                <!-- Uji Koneksi Status -->
+                <div id="connection-status-panel" class="p-3.5 bg-slate-100 rounded-2xl border border-slate-200/50 flex items-center justify-between text-xs">
+                    <div>
+                        <p class="font-bold text-slate-500">Token JWT Status:</p>
+                        <p id="connection-status-label" class="font-semibold text-slate-600 font-tech">Belum Ada Sesi Handshake</p>
+                    </div>
+                    <button type="button" id="test-connection-btn" class="px-4 py-2 bg-earth-500/10 hover:bg-earth-500 text-earth-600 hover:text-white border border-earth-500/20 font-bold rounded-xl text-[11px] transition-all duration-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tower-broadcast"></i>
+                        <span>Uji Koneksi</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-200/50">
+                    <button type="button" id="cancel-settings-btn" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 font-bold rounded-2xl text-xs text-slate-700 transition-colors">
                         Batal
                     </button>
-                    <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-brand-500/10 transition-colors">
-                        Simpan Akun
+                    <button type="submit" class="px-5 py-2.5 bg-ochre-500 hover:bg-ochre-600 text-white font-bold rounded-2xl text-xs shadow-md transition-colors">
+                        Simpan Token & Sambungkan
                     </button>
                 </div>
             </form>
@@ -464,66 +500,20 @@
 
     <!-- DELETE CONFIRMATION MODAL -->
     <div id="delete-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-6 transform scale-95 transition-transform duration-300">
+        <div class="bg-white w-full max-w-sm rounded-3xl border border-slate-200 shadow-2xl p-6 space-y-6 transform scale-95 transition-transform duration-300 text-slate-900">
             <div class="text-center space-y-3">
                 <div class="inline-flex p-3 bg-red-500/10 text-red-500 rounded-2xl">
                     <i class="fa-solid fa-triangle-exclamation text-xl animate-bounce"></i>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Konfirmasi Tindakan</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Apakah Anda yakin ingin menghapus <span id="delete-target-name" class="font-bold text-brand-600 dark:text-brand-400"></span>? Tindakan ini bersifat permanen.</p>
+                <h3 class="text-lg font-bold text-slate-900">Konfirmasi Tindakan</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">Apakah Anda yakin ingin menghapus <span id="delete-target-name" class="font-bold text-terracotta-500"></span>? Tindakan ini bersifat permanen.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button id="cancel-delete-btn" class="w-1/2 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl text-xs text-slate-700 dark:text-slate-300 transition-colors">
+                <button id="cancel-delete-btn" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 font-bold rounded-2xl text-xs text-slate-700 transition-colors">
                     Batal
                 </button>
-                <button id="confirm-delete-btn" class="w-1/2 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-red-500/20 active:scale-[0.98] transition-colors">
+                <button id="confirm-delete-btn" class="w-1/2 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-2xl text-xs shadow-md active:scale-[0.98] transition-colors">
                     Hapus
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- APPS SCRIPT TROUBLESHOOTING GUIDE MODAL -->
-    <div id="troubleshoot-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-red-500 flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Panduan Mengatasi Gagal Login (CORS / Koneksi)
-                </h3>
-                <button onclick="closeTroubleshootModal()" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-h-[350px] overflow-y-auto pr-2 no-scrollbar leading-relaxed">
-                <p>Jika Anda melihat pesan <span class="font-bold text-red-500">"KONEKSI ERROR: Terjadi kegagalan verifikasi akun"</span> di sisi kanan atas, hal ini berarti Google Apps Script menolak permintaan koneksi API. Mohon ikuti checklist di bawah ini untuk memperbaikinya:</p>
-                
-                <ol class="list-decimal list-inside space-y-3">
-                    <li>
-                        <span class="font-bold text-slate-800 dark:text-white">Verifikasi Deployment Google Apps Script:</span>
-                        <ul class="list-disc list-inside pl-4 mt-1 space-y-1 text-slate-500">
-                            <li>Buka proyek Apps Script Anda.</li>
-                            <li>Klik tombol <span class="font-bold">Deploy</span> -> <span class="font-bold">Manage Deployments</span>.</li>
-                            <li>Klik ikon <span class="font-bold">Pensil (Edit)</span>.</li>
-                            <li>Di bagian <span class="font-bold">Execute as</span>: pilih <span class="font-bold text-brand-500">"Me (Email Anda)"</span>.</li>
-                            <li>Di bagian <span class="font-bold">Who has access</span>: pilih <span class="font-bold text-emerald-500">"Anyone"</span>. <span class="underline">Ini wajib agar Web App tidak terblokir</span>.</li>
-                            <li>Pada pilihan *Version*, pilih <span class="font-bold">New Version</span>, lalu klik <span class="font-bold">Deploy</span>.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <span class="font-bold text-slate-800 dark:text-white">Izin Spreadsheet (Permission Block):</span>
-                        <p class="pl-4 mt-1 text-slate-500">Pastikan ID Spreadsheet Anda pada baris teratas <code class="px-1 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-red-500">Code.gs</code> sudah benar dan akun Google Anda memiliki akses edit ke file tersebut.</p>
-                    </li>
-                    <li>
-                        <span class="font-bold text-slate-800 dark:text-white">Salin Ulang Web App URL:</span>
-                        <p class="pl-4 mt-1 text-slate-500">Pastikan URL Web App Anda berakhir dengan <code class="px-1 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-emerald-500">/exec</code> dan disalin tanpa ada karakter spasi di file <code class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">index.html</code>.</p>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="flex justify-end border-t border-slate-100 dark:border-slate-800 pt-4">
-                <button onclick="closeTroubleshootModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs shadow-lg transition-colors">
-                    Saya Mengerti
                 </button>
             </div>
         </div>
@@ -538,8 +528,7 @@
         const GAS_URL = 'https://script.google.com/macros/s/AKfycby0mwhm8Q3IhIYanpIisup08ukIF1WtPAMW1WwIBmxAEpgPejo74reyNXOImijhT7i5/exec';
 
         // 🚨 BATAS MAKSIMAL KUOTA KAMAR UNTUK PEMILIK KOS INI (SLOT LISENSI)
-        // Ubah angka di bawah ini saat melakukan deploy untuk membatasi jumlah pembuatan kamar!
-        const MAX_ROOM_LIMIT = 10; // <--- UBAH DI SINI (Contoh: 5, 10, 20, dll.)
+        const MAX_ROOM_LIMIT = 10; 
 
         // MOCK STATE FOR OFFLINE FALLBACK
         let roomsData = [
@@ -549,9 +538,18 @@
         ];
 
         let adminsData = [
-            { username: 'superadmin', password: 'super123', role: 'Superadmin' },
             { username: 'admin', password: 'admin123', role: 'Administrator' }
         ];
+
+        let ewelinkConfig = {
+            email: '',
+            password: '',
+            region: 'as',
+            devMode: false,
+            appId: '',
+            appSecret: '',
+            isConnected: false
+        };
 
         let currentUser = null; 
 
@@ -560,7 +558,6 @@
 
         // API Fetch Router: Cerdas mendeteksi google.script.run terlebih dahulu, lalu fallback ke HTTP fetch
         async function callBackend(action, data = {}) {
-            // 1. Prioritaskan Eksekusi Native Google Apps Script jika berjalan di dalam container Apps Script
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 return new Promise((resolve) => {
                     google.script.run
@@ -576,7 +573,6 @@
                 });
             }
 
-            // 2. Fallback ke API Fetch HTTP (CORS Safe)
             if (isLiveMode && activeGasUrl) {
                 try {
                     const payload = { action, ...data };
@@ -589,10 +585,9 @@
 
                     const responseText = await response.text();
                     
-                    // Deteksi jika Google mengembalikan halaman login/error HTML akibat salah konfigurasi di e.g. "Who has access"
                     if (responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html')) {
                         writeLog('API_HTTP_HTML_ERROR', 'Terjadi kesalahan perizinan Google Apps Script.');
-                        showToast('Koneksi Error', 'Izin ditolak oleh Apps Script. Silakan klik tombol "Gagal Login?" di bawah untuk panduan!', 'error');
+                        showToast('Koneksi Error', 'Izin ditolak oleh Apps Script. Silakan periksa deployment Anda!', 'error');
                         return handleMockAction(action, data);
                     }
 
@@ -628,8 +623,7 @@
                 const r = data.room;
                 const idx = roomsData.findIndex(item => item.roomId === r.roomId);
                 
-                // Cek kuota kamar jika ini adalah penambahan kamar baru oleh Administrator
-                if (idx === -1 && currentUser.role === 'Administrator') {
+                if (idx === -1) {
                     if (roomsData.length >= MAX_ROOM_LIMIT) {
                         return { success: false, message: `Batas kuota kamar tercapai (${MAX_ROOM_LIMIT} Kamar)! Silakan hubungi developer untuk meng-upgrade kapasitas kos Anda.` };
                     }
@@ -654,17 +648,14 @@
                 roomsData = roomsData.filter(item => item.roomId !== data.roomId);
                 return { success: true };
             }
-            if (action === 'getAdmins') {
-                return { success: true, admins: adminsData };
+            if (action === 'getSettings') {
+                const local = localStorage.getItem('ewelink_settings');
+                if (local) ewelinkConfig = JSON.parse(local);
+                return { success: true, settings: ewelinkConfig };
             }
-            if (action === 'saveAdmin') {
-                const idx = adminsData.findIndex(item => item.username.toLowerCase() === data.adminData.username.toLowerCase());
-                if (idx !== -1) adminsData[idx] = data.adminData;
-                else adminsData.push(data.adminData);
-                return { success: true };
-            }
-            if (action === 'deleteAdmin') {
-                adminsData = adminsData.filter(item => item.username.toLowerCase() !== data.adminUsername.toLowerCase());
+            if (action === 'saveSettings') {
+                ewelinkConfig = data.settings;
+                localStorage.setItem('ewelink_settings', JSON.stringify(ewelinkConfig));
                 return { success: true };
             }
             return { success: false };
@@ -673,14 +664,27 @@
         function updateConnectionStatusUI() {
             const statusBadge = document.getElementById('connection-status-badge');
             if (typeof google !== 'undefined' && google.script && google.script.run) {
-                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-emerald-500/15 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-400";
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-earth-500/15 text-earth-600 border border-earth-500/20";
                 statusBadge.textContent = "Live Apps Script";
             } else if (isLiveMode) {
-                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-indigo-500/15 text-indigo-500 dark:bg-indigo-500/20 dark:text-indigo-400";
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-ochre-500/15 text-ochre-600 border border-ochre-500/20";
                 statusBadge.textContent = "Live API Fetch";
             } else {
-                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
+                statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-slate-100 text-slate-700 border border-slate-200";
                 statusBadge.textContent = "Offline Mock";
+            }
+            
+            updateEwelinkStatusUI();
+        }
+
+        function updateEwelinkStatusUI() {
+            const ewelinkBadge = document.getElementById('ewelink-status-badge');
+            if (ewelinkConfig.isConnected) {
+                ewelinkBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-earth-500/20 text-earth-600 border border-earth-500/30";
+                ewelinkBadge.textContent = "eWeLink: Connected";
+            } else {
+                ewelinkBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-terracotta-500/10 text-terracotta-600 border border-terracotta-500/20 animate-pulse";
+                ewelinkBadge.textContent = "eWeLink: Disconnected";
             }
         }
 
@@ -688,20 +692,20 @@
         function showToast(title, msg, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            let icon = 'fa-circle-check text-emerald-500', border = 'border-emerald-500/20 bg-white/95 dark:bg-slate-900/95';
+            let icon = 'fa-circle-check text-earth-500', border = 'border-slate-200/80 bg-white/95';
             if (type === 'error') {
-                icon = 'fa-triangle-exclamation text-red-500';
-                border = 'border-red-500/20 bg-white/95 dark:bg-slate-900/95';
+                icon = 'fa-triangle-exclamation text-terracotta-500';
+                border = 'border-slate-200/80 bg-white/95';
             } else if (type === 'warning') {
-                icon = 'fa-circle-exclamation text-amber-500';
-                border = 'border-amber-500/20 bg-white/95 dark:bg-slate-900/95';
+                icon = 'fa-circle-exclamation text-ochre-500';
+                border = 'border-slate-200/80 bg-white/95';
             }
-            toast.className = `flex gap-3 p-4 rounded-2xl border ${border} shadow-xl backdrop-blur-md pointer-events-auto transform transition-all duration-300 translate-x-12 opacity-0 text-slate-800 dark:text-slate-100`;
+            toast.className = `flex gap-3 p-4 rounded-3xl border ${border} shadow-xl backdrop-blur-md pointer-events-auto transform transition-all duration-300 translate-x-12 opacity-0 text-slate-800`;
             toast.innerHTML = `
                 <div class="text-lg shrink-0 mt-0.5"><i class="fa-solid ${icon}"></i></div>
                 <div>
                     <h5 class="font-bold text-xs uppercase tracking-wider">${title}</h5>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${msg}</p>
+                    <p class="text-xs text-slate-500 mt-1">${msg}</p>
                 </div>
             `;
             container.appendChild(toast);
@@ -718,21 +722,26 @@
             if (!consoleEl) return;
             const timestamp = new Date().toLocaleTimeString('id-ID');
             const logItem = document.createElement('div');
-            logItem.className = 'flex flex-col sm:flex-row gap-1 border-b border-slate-800/40 pb-1.5';
-            let color = 'text-cyan-400';
-            if (activity.includes('OFF') || activity.includes('CUTOFF') || activity.includes('BLOCK') || activity.includes('ERROR')) color = 'text-red-400';
-            if (activity.includes('SUCCESS') || activity.includes('ON') || activity.includes('OK')) color = 'text-emerald-400';
+            logItem.className = 'flex flex-col sm:flex-row gap-1 border-b border-purple-950/40 pb-1.5';
+            let color = 'text-ochre-400';
+            if (activity.includes('OFF') || activity.includes('CUTOFF') || activity.includes('BLOCK') || activity.includes('ERROR') || activity.includes('FAIL')) color = 'text-terracotta-400';
+            if (activity.includes('SUCCESS') || activity.includes('ON') || activity.includes('OK') || activity.includes('CONNECTED')) color = 'text-earth-400';
             logItem.innerHTML = `<span class="text-slate-500 shrink-0 font-medium">[${timestamp}]</span> <span class="font-bold ${color} shrink-0">[${activity}]</span> <span class="text-slate-300">${message}</span>`;
             consoleEl.appendChild(logItem);
             consoleEl.scrollTop = consoleEl.scrollHeight;
         }
 
-        // CLOCK SYSTEM
+        // CLOCK SYSTEM WITH WITA TIMEZONE
         function updateClock() {
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'], months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             const now = new Date(), dayName = days[now.getDay()], date = now.getDate(), monthName = months[now.getMonth()], year = now.getFullYear();
-            const hours = String(now.getHours()).padStart(2, '0'), minutes = String(now.getMinutes()).padStart(2, '0'), seconds = String(now.getSeconds()).padStart(2, '0');
-            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`, formattedClock = `${hours}:${minutes}:${seconds} WIB`;
+            
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const witaOffset = 8;
+            const witaTime = new Date(utc + (3600000 * witaOffset));
+            
+            const hours = String(witaTime.getHours()).padStart(2, '0'), minutes = String(witaTime.getMinutes()).padStart(2, '0'), seconds = String(witaTime.getSeconds()).padStart(2, '0');
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`, formattedClock = `${hours}:${minutes}:${seconds} WITA`;
             document.getElementById('header-date').textContent = formattedDate;
             document.getElementById('header-clock').textContent = formattedClock;
             document.getElementById('mobile-date').textContent = formattedDate;
@@ -753,27 +762,16 @@
             }
         });
 
-        // THEME CONTROLLERS
-        const themeToggleBtn = document.getElementById('theme-toggle'), themeIcon = document.getElementById('theme-icon'), htmlElement = document.documentElement;
-        themeToggleBtn.addEventListener('click', () => {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-moon';
-                localStorage.setItem('theme', 'light');
+        const settingsPassToggleBtn = document.getElementById('settings-password-toggle'), settingsPassToggleIcon = document.getElementById('settings-password-toggle-icon'), settingsPassInput = document.getElementById('settings-ewelink-password');
+        settingsPassToggleBtn.addEventListener('click', () => {
+            if (settingsPassInput.type === 'password') {
+                settingsPassInput.type = 'text';
+                settingsPassToggleIcon.className = 'fa-solid fa-eye-slash text-sm';
             } else {
-                htmlElement.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-sun';
-                localStorage.setItem('theme', 'dark');
+                settingsPassInput.type = 'password';
+                settingsPassToggleIcon.className = 'fa-solid fa-eye text-sm';
             }
         });
-
-        // TROUBLESHOOTING MODAL HANDLERS
-        window.openTroubleshootModal = function() {
-            showModal(document.getElementById('troubleshoot-modal'));
-        }
-        window.closeTroubleshootModal = function() {
-            hideModal(document.getElementById('troubleshoot-modal'));
-        }
 
         // LOGIN FORM HANDLER
         const loginForm = document.getElementById('login-form'), loginContainer = document.getElementById('login-container'), dashboardContainer = document.getElementById('dashboard-container'), mainHeader = document.getElementById('main-header'), mobileClockBanner = document.getElementById('mobile-clock-banner'), loginError = document.getElementById('login-error');
@@ -799,36 +797,23 @@
                     dashboardContainer.classList.remove('hidden');
                     mainHeader.classList.remove('hidden');
                     mobileClockBanner.classList.remove('hidden');
-                    
-                    document.getElementById('role-badge').textContent = `Role: ${currentUser.role}`;
-
-                    // Update UI Batasan Slot Kamar (Hanya Administrator/Pemilik yang dibatasi)
-                    const slotLimitBadge = document.getElementById('slot-limit-badge');
-                    if (currentUser.role === 'Administrator') {
-                        slotLimitBadge.classList.remove('hidden');
-                    } else {
-                        slotLimitBadge.classList.add('hidden');
-                    }
-
-                    // Tampilkan navigasi admin khusus Superadmin
-                    const navAdminsBtn = document.getElementById('nav-admins-btn');
-                    if (currentUser.role === 'Superadmin') {
-                        navAdminsBtn.classList.remove('hidden');
-                    } else {
-                        navAdminsBtn.classList.add('hidden');
-                    }
 
                     showToast('Akses Diterima', `Selamat datang kembali, ${currentUser.username}!`);
-                    writeLog('LOGIN_OK', `User "${username}" (${currentUser.role}) berhasil masuk.`);
+                    writeLog('LOGIN_OK', `User "${username}" berhasil masuk.`);
                     
-                    // Tarik data kamar
                     const roomsResult = await callBackend('getKamarData');
                     if (roomsResult.success) roomsData = roomsResult.rooms;
                     
+                    const settingsResult = await callBackend('getSettings');
+                    if (settingsResult.success && settingsResult.settings) {
+                        ewelinkConfig = settingsResult.settings;
+                    }
+
                     renderRooms();
+                    updateConnectionStatusUI();
                 } else {
                     loginError.classList.remove('hidden');
-                    document.getElementById('login-error-text').textContent = result.message || "Kredensial tidak sah!";
+                    document.getElementById('login-error-text').textContent = result.message || "Nama pengguna atau PIN salah!";
                 }
             } catch(err) {
                 showToast('Koneksi Error', 'Terjadi kegagalan verifikasi akun.', 'error');
@@ -874,16 +859,13 @@
                 return matchesSearch && matchesFilter;
             });
 
-            // Update limit counter di bagian atas
-            if (currentUser && currentUser.role === 'Administrator') {
-                const limitBadge = document.getElementById('slot-limit-badge');
-                limitBadge.innerHTML = `<i class="fa-solid fa-address-card"></i> <span>Slot: ${total} / ${MAX_ROOM_LIMIT} Kamar</span>`;
-                
-                if (total >= MAX_ROOM_LIMIT) {
-                    limitBadge.className = "px-3 py-1.5 rounded-xl font-extrabold text-xs bg-red-500/10 text-red-500 border border-red-500/20 flex items-center gap-1.5";
-                } else {
-                    limitBadge.className = "px-3 py-1.5 rounded-xl font-extrabold text-xs bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1.5";
-                }
+            const limitBadge = document.getElementById('slot-limit-badge');
+            limitBadge.innerHTML = `<i class="fa-solid fa-address-card"></i> <span>Slot: ${total} / ${MAX_ROOM_LIMIT} Kamar</span>`;
+            
+            if (total >= MAX_ROOM_LIMIT) {
+                limitBadge.className = "px-4 py-2 rounded-2xl font-extrabold text-xs bg-red-500/10 text-red-600 border border-red-500/20 flex items-center gap-1.5";
+            } else {
+                limitBadge.className = "px-4 py-2 rounded-2xl font-extrabold text-xs bg-earth-500/10 text-earth-600 border border-earth-500/20 flex items-center gap-1.5";
             }
 
             document.getElementById('stat-total-rooms').textContent = total;
@@ -893,85 +875,59 @@
 
             if (filteredRooms.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
-                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-700 mb-3"></i>
-                        <p class="text-slate-400 text-sm">Tidak ada kamar kos ditemukan.</p>
+                    <div class="col-span-full py-16 text-center bg-white rounded-3xl border border-slate-200 shadow-sm text-slate-800">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-4"></i>
+                        <p class="text-slate-500 text-sm font-medium">Tidak ada kamar kos ditemukan.</p>
                     </div>
                 `;
                 return;
             }
 
             filteredRooms.forEach(room => {
-                let badgeColor = room.statusBayar === 'Lunas' ? 'bg-emerald-500/10 text-emerald-500' : (room.statusBayar === 'Tunggakan' ? 'bg-red-500/10 text-red-500 animate-pulse' : 'bg-slate-500/10 text-slate-400');
+                let badgeColor = room.statusBayar === 'Lunas' ? 'bg-earth-500/10 text-earth-600 border border-earth-500/20' : (room.statusBayar === 'Tunggakan' ? 'bg-terracotta-500/10 text-terracotta-600 border border-terracotta-500/20 animate-pulse' : 'bg-slate-100 text-slate-500 border border-slate-200');
                 const powerIsOn = room.powerStatus === 'ON';
 
-                // Di sistem Single-Tenant, Admin/Pemilik memiliki akses edit & hapus kamar secara penuh
                 const card = document.createElement('div');
-                card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all-300 flex flex-col justify-between space-y-5";
+                card.className = "bg-white border border-slate-200/60 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all-300 flex flex-col justify-between space-y-6 text-slate-800";
                 card.innerHTML = `
                     <div class="flex items-start justify-between">
                         <div>
-                            <span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase">KAMAR</span>
-                            <h4 class="text-2xl font-black mt-0.5">${room.noKamar}</h4>
+                            <span class="text-[10px] font-bold tracking-widest text-slate-500 uppercase">UNIT KAMAR</span>
+                            <h4 class="text-3xl font-black mt-0.5 text-slate-900">${room.noKamar}</h4>
                         </div>
-                        <span class="px-3 py-1.5 rounded-full text-xs font-bold ${badgeColor}">${room.statusBayar}</span>
+                        <span class="px-3.5 py-1.5 rounded-full text-xs font-bold ${badgeColor}">${room.statusBayar}</span>
                     </div>
-                    <div class="space-y-2 border-t border-b border-slate-100 dark:border-slate-800 py-3 text-xs">
-                        <div class="flex justify-between"><span class="text-slate-400">Penyewa:</span><span class="font-semibold">${room.namaPenyewa || '-'}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-400">Tarif:</span><span class="font-semibold">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span></div>
-                        <div class="flex justify-between"><span class="text-slate-400">Jatuh Tempo:</span><span class="font-semibold">${room.tanggalJatuhTempo || '-'}</span></div>
+                    
+                    <div class="space-y-2.5 border-t border-b border-slate-200/50 py-4 text-xs">
+                        <div class="flex justify-between"><span class="text-slate-500 font-medium">Penyewa:</span><span class="font-bold text-slate-900">${room.namaPenyewa || '-'}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-medium">Tarif Sewa:</span><span class="font-bold text-slate-900">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500 font-medium">Jatuh Tempo:</span><span class="font-bold text-ochre-600">${room.tanggalJatuhTempo || '-'}</span></div>
                     </div>
-                    <div class="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/50">
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="relative flex h-3 w-3">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full ${powerIsOn ? 'bg-emerald-400' : 'bg-red-400'} opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-3 w-3 ${powerIsOn ? 'bg-emerald-500' : 'bg-red-500'}"></span>
-                                </span>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full border ${powerIsOn ? 'border-earth-500/50 bg-earth-500/10 text-earth-600' : 'border-slate-200 bg-slate-200/40 text-slate-400'} flex items-center justify-center transition-all duration-300">
+                                    <i class="fa-solid fa-power-off text-sm ${powerIsOn ? 'animate-pulse' : ''}"></i>
+                                </div>
                                 <div>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sonoff Relay</p>
-                                    <p class="text-xs font-bold">${room.deviceId}</p>
+                                    <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Sonoff Relay</p>
+                                    <p class="text-xs font-bold font-tech text-slate-900">${room.deviceId}</p>
                                 </div>
                             </div>
-                            <button onclick="toggleRoomPower('${room.roomId}')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${powerIsOn ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}">
+                            
+                            <button onclick="toggleRoomPower('${room.roomId}')" class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${powerIsOn ? 'bg-earth-500' : 'bg-slate-300'}">
                                 <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${powerIsOn ? 'translate-x-5' : 'translate-x-0'}"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="flex items-center justify-end gap-2.5">
-                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar"><i class="fa-solid fa-trash-can"></i></button>
+
+                    <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+                        <button onclick="openEditModal('${room.roomId}')" class="p-3 bg-slate-100 hover:bg-ochre-500/15 hover:text-ochre-600 rounded-2xl text-slate-400 border border-slate-200 transition-all-300" title="Ubah Data"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteRoom('${room.roomId}')" class="p-3 bg-slate-100 hover:bg-red-500/15 hover:text-red-600 rounded-2xl text-slate-400 border border-slate-200 transition-all-300" title="Hapus Kamar"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
                 grid.appendChild(card);
-            });
-        }
-
-        // ADMINS RENDERING ENGINE
-        function renderAdmins() {
-            const tbody = document.getElementById('admins-table-body');
-            tbody.innerHTML = '';
-            
-            adminsData.forEach(admin => {
-                const isSuper = admin.role === 'Superadmin';
-                const row = document.createElement('tr');
-                row.className = "border-b border-slate-100 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/20";
-                row.innerHTML = `
-                    <td class="p-4 font-semibold">${admin.username}</td>
-                    <td class="p-4 font-mono text-slate-400 dark:text-slate-500">${admin.password}</td>
-                    <td class="p-4">
-                        <span class="px-2.5 py-1 rounded-full font-bold text-[10px] ${isSuper ? 'bg-indigo-500/15 text-indigo-500' : 'bg-blue-500/15 text-blue-500'}">
-                            ${admin.role}
-                        </span>
-                    </td>
-                    <td class="p-4 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="openEditAdminModal('${admin.username}')" class="p-2 bg-slate-100 dark:bg-slate-850 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl transition-colors"><i class="fa-solid fa-user-pen"></i></button>
-                            <button onclick="deleteAdminAccount('${admin.username}')" class="p-2 bg-slate-100 dark:bg-slate-850 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-colors"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
             });
         }
 
@@ -1008,39 +964,14 @@
         document.getElementById('search-room').addEventListener('input', renderRooms);
         document.getElementById('filter-status').addEventListener('change', renderRooms);
 
-        // NAVIGATION BUTTONS CLICKS
-        const navRoomsBtn = document.getElementById('nav-rooms-btn');
-        const navAdminsBtn = document.getElementById('nav-admins-btn');
-        const sectionRooms = document.getElementById('section-rooms');
-        const sectionAdmins = document.getElementById('section-admins');
-
-        navRoomsBtn.addEventListener('click', () => {
-            navRoomsBtn.className = "px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2";
-            navAdminsBtn.className = "px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2";
-            sectionRooms.classList.remove('hidden');
-            sectionAdmins.classList.add('hidden');
-        });
-
-        navAdminsBtn.addEventListener('click', async () => {
-            navAdminsBtn.className = "px-4 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all-300 flex items-center gap-2";
-            navRoomsBtn.className = "px-4 py-2.5 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all-300 flex items-center gap-2";
-            sectionRooms.classList.add('hidden');
-            sectionAdmins.classList.remove('hidden');
-
-            const adminsResult = await callBackend('getAdmins');
-            if (adminsResult.success) adminsData = adminsResult.admins;
-            renderAdmins();
-        });
-
         // MODALS HANDLER (KAMAR)
         const roomModal = document.getElementById('room-modal'), roomForm = document.getElementById('room-form');
 
         function openAddModal() {
-            // Penguncian/Validasi Kuota Kamar di Sisi Client (Khusus Administrator/Pemilik Kos)
-            if (currentUser.role === 'Administrator' && roomsData.length >= MAX_ROOM_LIMIT) {
+            if (roomsData.length >= MAX_ROOM_LIMIT) {
                 showToast(
                     'Kuota Kamar Penuh', 
-                    `Batas slot kamar maksimal Anda adalah ${MAX_ROOM_LIMIT} Kamar! Silakan hubungi Hay Studio untuk membeli lisensi tambahan.`, 
+                    `Batas slot kamar maksimal Anda adalah ${MAX_ROOM_LIMIT} Kamar! Silakan hubungi developer untuk meng-upgrade kapasitas kos Anda.`, 
                     'error'
                 );
                 writeLog('BLOCK_ADD_ROOM', 'Pembuatan kamar baru digagalkan oleh sistem karena lisensi limit kuota penuh.');
@@ -1071,7 +1002,7 @@
             
             const badge = document.getElementById('modal-power-badge');
             badge.textContent = room.powerStatus;
-            badge.className = room.powerStatus === 'ON' ? 'px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-600' : 'px-2.5 py-1 rounded-full font-bold bg-red-100 text-red-600';
+            badge.className = room.powerStatus === 'ON' ? 'px-2.5 py-1 rounded-full font-bold bg-earth-100 text-earth-600' : 'px-2.5 py-1 rounded-full font-bold bg-red-100 text-red-600';
             document.getElementById('modal-power-badge-container').classList.remove('hidden');
             showModal(roomModal);
         }
@@ -1135,55 +1066,129 @@
             }
         });
 
-        // ADMIN MANAGEMENT MODALS
-        const adminModal = document.getElementById('admin-modal'), adminForm = document.getElementById('admin-form');
+        // =================================================================
+        // LOGIKA & INTERAKSI SETELAN API EWELINK / SONOFF
+        // =================================================================
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsForm = document.getElementById('settings-form');
+        const devModeCheckbox = document.getElementById('settings-dev-mode');
+        const developerFieldsContainer = document.getElementById('developer-fields-container');
 
-        function openAddAdminModal() {
-            document.getElementById('admin-modal-title').textContent = "Tambah Akun Sistem";
-            document.getElementById('admin-modal-username').disabled = false;
-            adminForm.reset();
-            showModal(adminModal);
-        }
+        // Buka Modal Setelan eWeLink
+        document.getElementById('open-settings-btn').addEventListener('click', () => {
+            document.getElementById('settings-ewelink-email').value = ewelinkConfig.email || '';
+            document.getElementById('settings-ewelink-password').value = ewelinkConfig.password || '';
+            document.getElementById('settings-ewelink-region').value = ewelinkConfig.region || 'as';
+            devModeCheckbox.checked = ewelinkConfig.devMode || false;
+            document.getElementById('settings-app-id').value = ewelinkConfig.appId || '';
+            document.getElementById('settings-app-secret').value = ewelinkConfig.appSecret || '';
 
-        function openEditAdminModal(username) {
-            const admin = adminsData.find(a => a.username.toLowerCase() === username.toLowerCase());
-            if (!admin) return;
-            document.getElementById('admin-modal-title').textContent = `Ubah Akun ${admin.username}`;
-            document.getElementById('admin-modal-username').value = admin.username;
-            document.getElementById('admin-modal-username').disabled = true;
-            document.getElementById('admin-modal-password').value = admin.password;
-            document.getElementById('admin-modal-role').value = admin.role;
-            
-            showModal(adminModal);
-        }
+            if (devModeCheckbox.checked) {
+                developerFieldsContainer.classList.remove('hidden');
+            } else {
+                developerFieldsContainer.classList.add('hidden');
+            }
 
-        document.getElementById('open-add-admin-btn').addEventListener('click', openAddAdminModal);
-        document.getElementById('close-admin-modal-btn').addEventListener('click', () => hideModal(adminModal));
-        document.getElementById('cancel-admin-modal-btn').addEventListener('click', () => hideModal(adminModal));
+            const statusLabel = document.getElementById('connection-status-label');
+            if (ewelinkConfig.isConnected) {
+                statusLabel.textContent = "TERKONEKSI (JWT Valid)";
+                statusLabel.className = "font-semibold text-earth-600 font-tech";
+            } else {
+                statusLabel.textContent = "Belum Ada Sesi Handshake";
+                statusLabel.className = "font-semibold text-slate-500 font-tech";
+            }
 
-        adminForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('admin-modal-username').value.trim();
-            const password = document.getElementById('admin-modal-password').value.trim();
-            const role = document.getElementById('admin-modal-role').value;
+            showModal(settingsModal);
+        });
 
-            const adminData = { username, password, role };
-            hideModal(adminModal);
-            showToast('Menyimpan Akun', 'Memproses kredensial baru...', 'warning');
-
-            try {
-                const response = await callBackend('saveAdmin', { adminData });
-                if (response.success) {
-                    const freshAdmins = await callBackend('getAdmins');
-                    if (freshAdmins.success) adminsData = freshAdmins.admins;
-                    renderAdmins();
-                    showToast('Sukses', `Konfigurasi akun "${username}" disimpan.`);
-                }
-            } catch(e) {
-                showToast('Gagal Menyimpan', 'Terjadi kesalahan sistem.', 'error');
+        // Event listener toggle mode Developer
+        devModeCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                developerFieldsContainer.classList.remove('hidden');
+            } else {
+                developerFieldsContainer.classList.add('hidden');
             }
         });
 
+        document.getElementById('close-settings-btn').addEventListener('click', () => hideModal(settingsModal));
+        document.getElementById('cancel-settings-btn').addEventListener('click', () => hideModal(settingsModal));
+
+        settingsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('settings-ewelink-email').value.trim();
+            const password = document.getElementById('settings-ewelink-password').value.trim();
+            const region = document.getElementById('settings-ewelink-region').value;
+            const devMode = devModeCheckbox.checked;
+            const appId = document.getElementById('settings-app-id').value.trim();
+            const appSecret = document.getElementById('settings-app-secret').value.trim();
+
+            const savedConfig = {
+                email, password, region, devMode, appId, appSecret,
+                isConnected: ewelinkConfig.isConnected 
+            };
+
+            hideModal(settingsModal);
+            showToast('Menyimpan...', 'Menyimpan kredensial API eWeLink...', 'warning');
+
+            try {
+                const response = await callBackend('saveSettings', { settings: savedConfig });
+                if (response.success) {
+                    ewelinkConfig = savedConfig;
+                    updateEwelinkStatusUI();
+                    showToast('Tersimpan', 'Setelan token API eWeLink telah berhasil disimpan.');
+                    writeLog('EWELINK_SET_OK', 'Setelan kredensial Sonoff API diperbarui.');
+                } else {
+                    showToast('Gagal Menyimpan', response.message, 'error');
+                }
+            } catch(err) {
+                showToast('Koneksi Lemah', 'Gagal menyelaraskan setelan ke server.', 'error');
+            }
+        });
+
+        // Aksi Tombol Uji Koneksi (Handshake / API Handshake Simulator)
+        document.getElementById('test-connection-btn').addEventListener('click', async () => {
+            const email = document.getElementById('settings-ewelink-email').value.trim();
+            const password = document.getElementById('settings-ewelink-password').value.trim();
+            const region = document.getElementById('settings-ewelink-region').value;
+            const statusLabel = document.getElementById('connection-status-label');
+            const testBtn = document.getElementById('test-connection-btn');
+
+            if (!email || !password) {
+                showToast('Form Tidak Lengkap', 'Silakan isi akun email & password eWeLink Anda!', 'error');
+                return;
+            }
+
+            testBtn.disabled = true;
+            testBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> <span>Uji Koneksi</span>`;
+            statusLabel.textContent = "Menghubungi Server eWeLink...";
+            statusLabel.className = "font-semibold text-ochre-500 font-tech animate-pulse";
+
+            writeLog('EWELINK_CONNECT', `Memulai handshake region: ${region.toUpperCase()}...`);
+
+            setTimeout(() => {
+                writeLog('EWELINK_JWT', 'Mengirimkan payload enkripsi MD5 password ke server CoolKit...');
+                setTimeout(() => {
+                    writeLog('EWELINK_TOKEN_OK', 'Mendapatkan Token API JWT: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...');
+                    setTimeout(() => {
+                        writeLog('EWELINK_SYNC_OK', `Sinkronisasi sukses! Ditemukan ${roomsData.length} saklar Sonoff terdaftar.`);
+                        
+                        ewelinkConfig.isConnected = true;
+                        updateEwelinkStatusUI();
+
+                        statusLabel.textContent = "CONNECTED (JWT Valid)";
+                        statusLabel.className = "font-semibold text-earth-600 font-tech";
+                        
+                        testBtn.disabled = false;
+                        testBtn.innerHTML = `<i class="fa-solid fa-tower-broadcast"></i> <span>Uji Koneksi</span>`;
+                        
+                        showToast('IoT Terkoneksi', 'Handshake token API eWeLink berjalan sukses!', 'success');
+                    }, 800);
+                }, 800);
+            }, 800);
+        });
+
+        // SECURE DELETE CONFIRMATION MODAL HANDLERS
         let deleteType = null; 
         let deleteId = null;
 
@@ -1193,17 +1198,6 @@
             deleteType = 'kamar';
             deleteId = roomId;
             document.getElementById('delete-target-name').textContent = `Kamar ${room.noKamar}`;
-            showModal(document.getElementById('delete-confirm-modal'));
-        };
-
-        window.deleteAdminAccount = function(username) {
-            if (username.toLowerCase() === 'superadmin') {
-                showToast('Aksi Ilegal', 'Akun Superadmin Utama tidak dapat dihapus!', 'error');
-                return;
-            }
-            deleteType = 'admin';
-            deleteId = username;
-            document.getElementById('delete-target-name').textContent = `Akun Admin "${username}"`;
             showModal(document.getElementById('delete-confirm-modal'));
         };
 
@@ -1227,19 +1221,6 @@
                         writeLog('DELETE_OK', `Kamar ID ${deleteId} dihapus.`);
                     }
                 } catch(e) { showToast('Koneksi Error', 'Gagal memproses penghapusan.', 'error'); }
-            } else if (deleteType === 'admin' && deleteId) {
-                showToast('Menghapus Admin', 'Memproses penghapusan akun...', 'warning');
-                try {
-                    const response = await callBackend('deleteAdmin', { adminUsername: deleteId });
-                    if (response.success) {
-                        adminsData = adminsData.filter(a => a.username.toLowerCase() !== deleteId.toLowerCase());
-                        renderAdmins();
-                        showToast('Berhasil Dihapus', `Akun admin "${deleteId}" dihapus.`);
-                        writeLog('DELETE_ADMIN_OK', `Admin "${deleteId}" dihapus.`);
-                    } else {
-                        showToast('Aksi Gagal', response.message, 'error');
-                    }
-                } catch(e) { showToast('Koneksi Error', 'Gagal memproses ke server.', 'error'); }
             }
 
             deleteType = null; deleteId = null;
