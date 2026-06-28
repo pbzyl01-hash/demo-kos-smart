@@ -90,7 +90,7 @@
                 <div class="flex items-center gap-3 sm:gap-5">
                     <div class="hidden md:flex flex-col text-right">
                         <span id="header-date" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sabtu, 27 Juni 2026</span>
-                        <span id="header-clock" class="text-sm font-bold font-tech text-brand-600 dark:text-brand-400">21:13:00 WITA</span>
+                        <span id="header-clock" class="text-sm font-bold font-tech text-brand-600 dark:text-brand-400">21:13:00 WIB</span>
                     </div>
 
                     <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all-300" aria-label="Toggle Theme">
@@ -107,7 +107,7 @@
 
         <div id="mobile-clock-banner" class="hidden md:hidden bg-slate-100 dark:bg-slate-900 px-4 py-2 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs">
             <span id="mobile-date" class="font-medium text-slate-600 dark:text-slate-400">27 Juni 2026</span>
-            <span id="mobile-clock" class="font-bold font-tech text-brand-500 dark:text-brand-400">21:13:00 WITA</span>
+            <span id="mobile-clock" class="font-bold font-tech text-brand-500 dark:text-brand-400">21:13:00 WIB</span>
         </div>
 
         <main class="flex-grow flex flex-col">
@@ -535,7 +535,7 @@
         // ⚙️ KONFIGURASI SAAS SINGLE-TENANT (DEPLOY TERPISAH PER PEMILIK)
         // =================================================================
         // Masukkan URL Google Apps Script milik Pemilik Kos bersangkutan di bawah ini:
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycby0mwhm8Q3IhIYanpIisup08ukIF1WtPAMW1WWITAmxAEpgPejo74reyNXOImijhT7i5/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycby0mwhm8Q3IhIYanpIisup08ukIF1WtPAMW1WwIBmxAEpgPejo74reyNXOImijhT7i5/exec';
 
         // 🚨 BATAS MAKSIMAL KUOTA KAMAR UNTUK PEMILIK KOS INI (SLOT LISENSI)
         // Ubah angka di bawah ini saat melakukan deploy untuk membatasi jumlah pembuatan kamar!
@@ -732,7 +732,7 @@
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'], months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             const now = new Date(), dayName = days[now.getDay()], date = now.getDate(), monthName = months[now.getMonth()], year = now.getFullYear();
             const hours = String(now.getHours()).padStart(2, '0'), minutes = String(now.getMinutes()).padStart(2, '0'), seconds = String(now.getSeconds()).padStart(2, '0');
-            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`, formattedClock = `${hours}:${minutes}:${seconds} WITA`;
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`, formattedClock = `${hours}:${minutes}:${seconds} WIB`;
             document.getElementById('header-date').textContent = formattedDate;
             document.getElementById('header-clock').textContent = formattedClock;
             document.getElementById('mobile-date').textContent = formattedDate;
