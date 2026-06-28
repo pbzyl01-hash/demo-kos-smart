@@ -49,12 +49,10 @@
             animation: glowPulse 3s infinite ease-in-out;
         }
         
-        /* Smooth transitions */
         .transition-all-300 {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Hide scrollbars but keep functionality */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -70,11 +68,9 @@
 
     <div id="app-wrapper" class="min-h-screen flex flex-col">
         
-        <!-- HEADER / NAVIGATION -->
         <header id="main-header" class="hidden border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-all-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 
-                <!-- Brand Title with glow effect & Connection Status -->
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 bg-brand-600 rounded-xl text-white shadow-lg shadow-brand-500/30">
                         <i class="fa-solid fa-house-signal text-lg"></i>
@@ -90,20 +86,16 @@
                     </div>
                 </div>
 
-                <!-- Live Clock, Theme & Profile Widget -->
                 <div class="flex items-center gap-3 sm:gap-5">
-                    <!-- Live Time & Date Desk -->
                     <div class="hidden md:flex flex-col text-right">
                         <span id="header-date" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Sabtu, 27 Juni 2026</span>
                         <span id="header-clock" class="text-sm font-bold font-tech text-brand-600 dark:text-brand-400">21:13:00 WIB</span>
                     </div>
 
-                    <!-- Theme Toggle Button -->
                     <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all-300" aria-label="Toggle Theme">
                         <i id="theme-icon" class="fa-solid fa-sun"></i>
                     </button>
 
-                    <!-- Exit App / Log out -->
                     <button id="logout-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 transition-all-300 font-semibold text-xs sm:text-sm">
                         <i class="fa-solid fa-power-off"></i>
                         <span class="hidden sm:inline">Keluar</span>
@@ -117,14 +109,11 @@
             <span id="mobile-clock" class="font-bold font-tech text-brand-500 dark:text-brand-400">21:13:00 WIB</span>
         </div>
 
-        <!-- MAIN INTERFACE BODY -->
         <main class="flex-grow flex flex-col">
 
-            <!-- LOGIN ACCESS SCREEN -->
             <div id="login-container" class="flex-grow flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-all-300">
                 <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-10 transition-all-300">
                     
-                    <!-- Decorative Top Area -->
                     <div class="text-center mb-8">
                         <div class="inline-flex items-center justify-center p-4 bg-brand-500/10 rounded-2xl text-brand-500 mb-4 ring-4 ring-brand-500/5">
                             <i class="fa-solid fa-shield-halved text-3xl"></i>
@@ -135,13 +124,11 @@
                         <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm sm:text-base">Masuk untuk mengelola kamar & kontrol daya Sonoff</p>
                     </div>
 
-                    <!-- Login Error Message Container -->
                     <div id="login-error" class="hidden mb-5 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-600 dark:text-red-400 text-xs sm:text-sm">
                         <i class="fa-solid fa-triangle-exclamation text-base shrink-0"></i>
                         <span id="login-error-text">Nama pengguna atau sandi salah!</span>
                     </div>
 
-                    <!-- Login Form -->
                     <form id="login-form" class="space-y-5">
                         <div>
                             <label for="username" class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Username Akses</label>
@@ -174,7 +161,6 @@
                         </div>
                     </form>
 
-                    <!-- Premium Styled Credits Tooltip -->
                     <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800/60 text-center">
                         <div class="inline-block px-3.5 py-1.5 bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/10 dark:border-brand-500/20 rounded-xl text-[11px] text-slate-500 dark:text-slate-400">
                             <span class="font-medium text-slate-400">Powered By</span> 
@@ -185,7 +171,6 @@
                 </div>
             </div>
 
-            <!-- MAIN DASHBOARD -->
             <div id="dashboard-container" class="hidden flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
                 
                 <!-- Tab Switching Panel & Action Row -->
@@ -201,8 +186,11 @@
                         </button>
                     </div>
                     
-                    <!-- Quick Actions -->
-                    <div class="flex items-center gap-3">
+                    <!-- Quick Actions with Slot Limit Counter -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span id="slot-limit-badge" class="hidden px-3 py-1.5 rounded-xl font-extrabold text-xs bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+                            Slot: - / - Kamar
+                        </span>
                         <span id="role-badge" class="px-3 py-1.5 rounded-xl font-bold text-xs uppercase bg-brand-500/10 text-brand-500">
                             Role: Loading...
                         </span>
@@ -314,7 +302,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-xl font-bold tracking-tight">Kelola Akun Admin</h3>
-                            <p class="text-xs text-slate-400 mt-1">Buat, edit, dan batasi nomor kamar kos yang didelegasikan kepada masing-masing admin.</p>
+                            <p class="text-xs text-slate-400 mt-1">Buat, edit, dan batasi jumlah kapasitas maksimal kamar kos yang boleh dibuat oleh masing-masing pemilik kos.</p>
                         </div>
                         <button id="open-add-admin-btn" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all-300 flex items-center gap-2">
                             <i class="fa-solid fa-user-plus"></i>
@@ -325,12 +313,12 @@
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs sm:text-sm border-collapse">
-                                <thead class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                                <head class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                                     <tr>
-                                        <th class="p-4 font-bold text-slate-400">Username</th>
+                                        <th class="p-4 font-bold text-slate-400">Username Pemilik Kos</th>
                                         <th class="p-4 font-bold text-slate-400">Sandi / PIN</th>
                                         <th class="p-4 font-bold text-slate-400">Akses Peran</th>
-                                        <th class="p-4 font-bold text-slate-400">Alokasi Kamar Dikelola</th>
+                                        <th class="p-4 font-bold text-slate-400">Limit Kuota Kamar</th>
                                         <th class="p-4 font-bold text-slate-400 text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -428,7 +416,7 @@
         <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-5 transform scale-95 transition-transform duration-300">
             
             <div class="flex items-center justify-between">
-                <h3 id="admin-modal-title" class="text-lg font-bold">Tambah Akun Admin</h3>
+                <h3 id="admin-modal-title" class="text-lg font-bold">Tambah Akun Pemilik Kos</h3>
                 <button id="close-admin-modal-btn" class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -448,18 +436,18 @@
                 <div>
                     <label for="admin-modal-role" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Akses Peran</label>
                     <select id="admin-modal-role" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none">
-                        <option value="Administrator">Administrator (Kamar Terbatas)</option>
-                        <option value="Superadmin">Superadmin (Akses Penuh)</option>
+                        <option value="Administrator">Administrator (Pemilik Kos)</option>
+                        <option value="Superadmin">Superadmin (Akses Penuh Seluruh Server)</option>
                     </select>
                 </div>
 
-                <!-- Checked list of rooms -->
-                <div id="rooms-assign-container">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Delegasi Kamar yang Dikelola</label>
-                    <div id="rooms-checkbox-list" class="max-h-36 overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl p-3 space-y-2 bg-slate-50 dark:bg-slate-950/50">
-                        <!-- Populated dynamically -->
+                <!-- Checked list of rooms & Max Room limits -->
+                <div id="rooms-assign-container" class="space-y-4">
+                    <div>
+                        <label for="admin-modal-limit" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Batas Maksimal Kuota Kamar (Slot Lisensi)</label>
+                        <input type="number" id="admin-modal-limit" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl text-sm outline-none" placeholder="Contoh: 10" value="5">
+                        <p class="text-[10px] text-slate-400 mt-1">*Pemilik kos ini tidak akan bisa menambah kamar kos melebihi kuota slot ini.</p>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1">*Jika tipe peran diset ke Superadmin, mereka otomatis dapat mengelola semua kamar.</p>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-4">
@@ -500,20 +488,18 @@
         // =================================================================
         // ⚙️ KONFIGURASI INTEGRASI DATABASE LIVE (GOOGLE APPS SCRIPT)
         // =================================================================
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycby0mwhm8Q3IhIYanpIisup08ukIF1WtPAMW1WwIBmxAEpgPejo74reyNXOImijhT7i5/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx3AU-am5RlQ6Iqh9E4qoymREX_nH5NOzkYyNqchWg36px0TiqPNW1LQbZZzMVZIW4/exec';
 
         // MOCK STATE FOR OFFLINE FALLBACK
         let roomsData = [
-            { roomId: '101', noKamar: '101', namaPenyewa: 'Budi Santoso', tarif: 1200000, tanggalJatuhTempo: '2026-07-10', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_101' },
-            { roomId: '102', noKamar: '102', namaPenyewa: 'Dewi Lestari', tarif: 1500000, tanggalJatuhTempo: '2026-06-25', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_102' },
-            { roomId: '103', noKamar: '103', namaPenyewa: 'Andi Wijaya', tarif: 1200000, tanggalJatuhTempo: '2026-07-01', statusBayar: 'Kosong', powerStatus: 'OFF', deviceId: 'SONOFF_103' },
-            { roomId: '104', noKamar: '104', namaPenyewa: 'Faisal Akbar', tarif: 1300000, tanggalJatuhTempo: '2026-07-15', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_104' },
-            { roomId: '105', noKamar: '105', namaPenyewa: 'Siti Rahma', tarif: 1250000, tanggalJatuhTempo: '2026-06-20', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_105' }
+            { roomId: '101', noKamar: '101', namaPenyewa: 'Budi Santoso', tarif: 1200000, tanggalJatuhTempo: '2026-07-10', statusBayar: 'Lunas', powerStatus: 'ON', deviceId: 'SONOFF_101', owner: 'admin' },
+            { roomId: '102', noKamar: '102', namaPenyewa: 'Dewi Lestari', tarif: 1500000, tanggalJatuhTempo: '2026-06-25', statusBayar: 'Tunggakan', powerStatus: 'OFF', deviceId: 'SONOFF_102', owner: 'admin' },
+            { roomId: '103', noKamar: '103', namaPenyewa: 'Andi Wijaya', tarif: 1200000, tanggalJatuhTempo: '2026-07-01', statusBayar: 'Kosong', powerStatus: 'OFF', deviceId: 'SONOFF_103', owner: 'admin' }
         ];
 
         let adminsData = [
-            { username: 'superadmin', password: 'super123', role: 'Superadmin', kamarDikelola: 'all' },
-            { username: 'admin', password: 'admin123', role: 'Administrator', kamarDikelola: '101,102' }
+            { username: 'superadmin', password: 'super123', role: 'Superadmin', kamarDikelola: 'all', batasKamar: 999 },
+            { username: 'admin', password: 'admin123', role: 'Administrator', kamarDikelola: 'all', batasKamar: 5 }
         ];
 
         let currentUser = null; 
@@ -521,9 +507,7 @@
         const activeGasUrl = (GAS_URL && GAS_URL !== 'TEMPELKAN_GAS_URL_ANDA_DI_SINI') ? GAS_URL.trim() : '';
         const isLiveMode = activeGasUrl !== '';
 
-        // API Fetch Router: Cerdas mendeteksi google.script.run terlebih dahulu, lalu fallback ke HTTP fetch
         async function callBackend(action, data = {}) {
-            // 1. Prioritaskan Eksekusi Native Google Apps Script
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 return new Promise((resolve) => {
                     google.script.run
@@ -535,14 +519,13 @@
                             showToast('Native GAS Error', err.message || 'Kesalahan Server Apps Script', 'error');
                             resolve({ success: false, message: err.message || String(err) });
                         })
-                        .executeAction(action, data);
+                        .executeAction(action, { username: currentUser ? currentUser.username : '', role: currentUser ? currentUser.role : '', ...data });
                 });
             }
 
-            // 2. Fallback ke API Fetch HTTP (CORS Safe)
             if (isLiveMode && activeGasUrl) {
                 try {
-                    const payload = { action, ...data };
+                    const payload = { action, username: currentUser ? currentUser.username : '', role: currentUser ? currentUser.role : '', ...data };
                     const response = await fetch(activeGasUrl, {
                         method: 'POST',
                         mode: 'cors',
@@ -552,7 +535,6 @@
 
                     const responseText = await response.text();
                     
-                    // Deteksi jika Google mengembalikan halaman error HTML (misal kegagalan izin akses spreadsheet)
                     if (responseText.trim().startsWith('<!DOCTYPE') || responseText.trim().startsWith('<html')) {
                         writeLog('API_HTTP_HTML_ERROR', 'Menerima respon HTML dari Google (indikasi salah konfigurasi izin Web App).');
                         showToast('Izin Google Ditolak', 'Google Apps Script mengembalikan halaman HTML. Mohon deploy ulang dengan akses "Anyone"!', 'error');
@@ -572,26 +554,42 @@
                 }
             }
 
-            // 3. Gunakan simulasi tiruan offline jika tidak ada koneksi live yang diset
             return handleMockAction(action, data);
         }
 
-        // Penanganan fallback simulasi luring
         function handleMockAction(action, data) {
             writeLog('SIMULASI_MOCK', `Aksi lokal offline: ${action}`);
             if (action === 'checkLogin') {
                 const u = adminsData.find(item => item.username.toLowerCase() === data.username.toLowerCase() && item.password === data.password);
-                if (u) return { success: true, role: u.role, kamarDikelola: u.kamarDikelola };
+                if (u) return { success: true, role: u.role, kamarDikelola: u.kamarDikelola, batasKamar: u.batasKamar };
                 return { success: false, message: 'ID atau Sandi tidak cocok' };
             }
             if (action === 'getKamarData') {
-                return { success: true, rooms: roomsData };
+                const user = currentUser ? currentUser.username : '';
+                const role = currentUser ? currentUser.role : '';
+                const filtered = roomsData.filter(r => role === 'Superadmin' || r.owner.toLowerCase() === user.toLowerCase());
+                return { success: true, rooms: filtered };
             }
             if (action === 'saveKamar') {
                 const r = data.room;
-                const idx = roomsData.findIndex(item => item.roomId === r.roomId);
-                if (idx !== -1) roomsData[idx] = r;
-                else roomsData.push(r);
+                const user = currentUser ? currentUser.username : '';
+                const role = currentUser ? currentUser.role : '';
+                
+                const existingIndex = roomsData.findIndex(item => item.roomId === r.roomId);
+                
+                if (existingIndex === -1 && role === 'Administrator') {
+                    const count = roomsData.filter(item => item.owner.toLowerCase() === user.toLowerCase()).length;
+                    const limit = currentUser ? currentUser.batasKamar : 5;
+                    if (count >= limit) {
+                        return { success: false, message: `Batas kuota kamar Anda terlampaui (${limit} Kamar)! Silakan hubungi developer untuk upgrade paket lisensi.` };
+                    }
+                }
+
+                if (existingIndex !== -1) {
+                    roomsData[existingIndex] = { ...r, owner: roomsData[existingIndex].owner };
+                } else {
+                    roomsData.push({ ...r, owner: user });
+                }
                 return { success: true };
             }
             if (action === 'togglePower') {
@@ -627,7 +625,6 @@
 
         function updateConnectionStatusUI() {
             const statusBadge = document.getElementById('connection-status-badge');
-            // Deteksi lingkungan eksekusi
             if (typeof google !== 'undefined' && google.script && google.script.run) {
                 statusBadge.className = "px-2.5 py-0.5 text-[9px] rounded-full uppercase font-bold bg-emerald-500/15 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-400";
                 statusBadge.textContent = "Live Apps Script";
@@ -697,13 +694,12 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // PASSWORD EAGLE-EYE CONTROLLER
+        // PASSWORD TOGGLING
         const passToggleBtn = document.getElementById('password-toggle'), passToggleIcon = document.getElementById('password-toggle-icon'), passInput = document.getElementById('password');
         passToggleBtn.addEventListener('click', () => {
             if (passInput.type === 'password') {
                 passInput.type = 'text';
                 passToggleIcon.className = 'fa-solid fa-eye-slash text-base';
-                showToast('Mata Elang Aktif', 'PIN terlihat', 'warning');
             } else {
                 passInput.type = 'password';
                 passToggleIcon.className = 'fa-solid fa-eye text-base';
@@ -723,12 +719,8 @@
                 localStorage.setItem('theme', 'dark');
             }
         });
-        if (localStorage.getItem('theme') === 'light') {
-            htmlElement.classList.remove('dark');
-            themeIcon.className = 'fa-solid fa-moon';
-        }
 
-        // LOGIN ACCESS HANDLER
+        // LOGIN FORM HANDLER
         const loginForm = document.getElementById('login-form'), loginContainer = document.getElementById('login-container'), dashboardContainer = document.getElementById('dashboard-container'), mainHeader = document.getElementById('main-header'), mobileClockBanner = document.getElementById('mobile-clock-banner'), loginError = document.getElementById('login-error');
 
         loginForm.addEventListener('submit', async (e) => {
@@ -746,6 +738,7 @@
                     currentUser = {
                         username: username,
                         role: result.role,
+                        batasKamar: parseInt(result.batasKamar) || 5,
                         kamarDikelola: result.kamarDikelola === 'all' ? 'all' : result.kamarDikelola.split(',').map(n => n.trim())
                     };
 
@@ -756,20 +749,20 @@
                     
                     document.getElementById('role-badge').textContent = `Role: ${currentUser.role}`;
 
-                    // Tampilkan navigasi admin khusus Superadmin
+                    // Update UI Batasan Slot Kamar
+                    const slotLimitBadge = document.getElementById('slot-limit-badge');
+                    if (currentUser.role === 'Administrator') {
+                        slotLimitBadge.classList.remove('hidden');
+                    } else {
+                        slotLimitBadge.classList.add('hidden');
+                    }
+
+                    // Pengaturan Menu Superadmin
                     const navAdminsBtn = document.getElementById('nav-admins-btn');
                     if (currentUser.role === 'Superadmin') {
                         navAdminsBtn.classList.remove('hidden');
                     } else {
                         navAdminsBtn.classList.add('hidden');
-                    }
-
-                    // Pengaturan visibilitas tombol tambah kamar (Hanya Superadmin)
-                    const openAddRoomBtn = document.getElementById('open-add-room-btn');
-                    if (currentUser.role === 'Superadmin') {
-                        openAddRoomBtn.classList.remove('hidden');
-                    } else {
-                        openAddRoomBtn.classList.add('hidden');
                     }
 
                     showToast('Akses Diterima', `Selamat datang kembali, ${currentUser.username}!`);
@@ -792,7 +785,6 @@
             }
         });
 
-        // Logout
         document.getElementById('logout-btn').addEventListener('click', () => {
             currentUser = null;
             loginContainer.classList.remove('hidden');
@@ -814,10 +806,10 @@
             
             let total = 0, occupied = 0, activePower = 0, arrears = 0;
 
-            // Filter kamar sesuai hak kelola Admin
+            // Filter kamar milik admin bersangkutan (Superadmin memuat seluruh kamar)
             const authorizedRooms = roomsData.filter(room => {
-                if (currentUser.role === 'Superadmin' || currentUser.kamarDikelola === 'all') return true;
-                return currentUser.kamarDikelola.includes(room.noKamar);
+                if (currentUser.role === 'Superadmin') return true;
+                return room.owner.toLowerCase() === currentUser.username.toLowerCase();
             });
 
             const filteredRooms = authorizedRooms.filter(room => {
@@ -835,6 +827,11 @@
                 return matchesSearch && matchesFilter;
             });
 
+            // Update limit counter di bagian atas
+            if (currentUser && currentUser.role === 'Administrator') {
+                document.getElementById('slot-limit-badge').textContent = `Slot: ${total} / ${currentUser.batasKamar} Kamar Terpakai`;
+            }
+
             document.getElementById('stat-total-rooms').textContent = total;
             document.getElementById('stat-occupied-rooms').textContent = occupied;
             document.getElementById('stat-power-active').textContent = activePower;
@@ -844,7 +841,7 @@
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
                         <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-700 mb-3"></i>
-                        <p class="text-slate-400 text-sm">Tidak ada kamar kos yang dikelola ditemukan.</p>
+                        <p class="text-slate-400 text-sm">Tidak ada kamar kos yang Anda kelola ditemukan.</p>
                     </div>
                 `;
                 return;
@@ -854,17 +851,7 @@
                 let badgeColor = room.statusBayar === 'Lunas' ? 'bg-emerald-500/10 text-emerald-500' : (room.statusBayar === 'Tunggakan' ? 'bg-red-500/10 text-red-500 animate-pulse' : 'bg-slate-500/10 text-slate-400');
                 const powerIsOn = room.powerStatus === 'ON';
 
-                // Hak edit dan hapus kamar dibatasi hanya untuk Superadmin
-                const isSuper = currentUser.role === 'Superadmin';
-                const actionButtons = `
-                    <div class="flex items-center justify-end gap-2.5">
-                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data"><i class="fa-solid fa-pen-to-square"></i></button>
-                        ${isSuper ? `
-                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar"><i class="fa-solid fa-trash-can"></i></button>
-                        ` : ''}
-                    </div>
-                `;
-
+                // Di sistem SaaS komersial, Admin / Pemilik Kos memiliki hak penuh mengedit dan menghapus kamarnya sendiri
                 const card = document.createElement('div');
                 card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all-300 flex flex-col justify-between space-y-5";
                 card.innerHTML = `
@@ -879,6 +866,7 @@
                         <div class="flex justify-between"><span class="text-slate-400">Penyewa:</span><span class="font-semibold">${room.namaPenyewa || '-'}</span></div>
                         <div class="flex justify-between"><span class="text-slate-400">Tarif:</span><span class="font-semibold">Rp ${Number(room.tarif).toLocaleString('id-ID')}/bln</span></div>
                         <div class="flex justify-between"><span class="text-slate-400">Jatuh Tempo:</span><span class="font-semibold">${room.tanggalJatuhTempo || '-'}</span></div>
+                        ${currentUser.role === 'Superadmin' ? `<div class="flex justify-between border-t border-dashed border-slate-150 dark:border-slate-850 pt-2"><span class="text-slate-400">Pemilik (Admin):</span><span class="font-bold text-indigo-500">${room.owner}</span></div>` : ''}
                     </div>
                     <div class="p-3.5 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                         <div class="flex items-center justify-between">
@@ -897,13 +885,15 @@
                             </button>
                         </div>
                     </div>
-                    ${actionButtons}
+                    <div class="flex items-center justify-end gap-2.5">
+                        <button onclick="openEditModal('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-brand-500/10 hover:text-brand-500 rounded-xl text-slate-400 transition-all-300" title="Ubah Data"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteRoom('${room.roomId}')" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-red-500/10 hover:text-red-500 rounded-xl text-slate-400 transition-all-300" title="Hapus Kamar"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // ADMINS RENDERING ENGINE
         function renderAdmins() {
             const tbody = document.getElementById('admins-table-body');
             tbody.innerHTML = '';
@@ -920,9 +910,9 @@
                             ${admin.role}
                         </span>
                     </td>
-                    <td class="p-4 max-w-[200px] truncate" title="${admin.kamarDikelola}">
-                        <span class="font-medium text-slate-600 dark:text-slate-300">
-                            ${isSuper ? 'Semua Kamar' : (admin.kamarDikelola || '-')}
+                    <td class="p-4">
+                        <span class="font-extrabold ${isSuper ? 'text-slate-400' : 'text-brand-500'}">
+                            ${isSuper ? 'Tanpa Batas' : (admin.batasKamar + ' Kamar')}
                         </span>
                     </td>
                     <td class="p-4 text-center">
@@ -936,7 +926,6 @@
             });
         }
 
-        // CONTROL RELAY POWER
         async function toggleRoomPower(roomId) {
             const room = roomsData.find(r => r.roomId === roomId);
             if (!room) return;
@@ -969,7 +958,6 @@
         document.getElementById('search-room').addEventListener('input', renderRooms);
         document.getElementById('filter-status').addEventListener('change', renderRooms);
 
-        // NAVIGATION BUTTONS CLICKS
         const navRoomsBtn = document.getElementById('nav-rooms-btn');
         const navAdminsBtn = document.getElementById('nav-admins-btn');
         const sectionRooms = document.getElementById('section-rooms');
@@ -993,7 +981,6 @@
             renderAdmins();
         });
 
-        // MODALS HANDLER (KAMAR)
         const roomModal = document.getElementById('room-modal'), roomForm = document.getElementById('room-form');
 
         function openAddModal() {
@@ -1077,20 +1064,20 @@
                     renderRooms();
                     showToast('Tersimpan', `Kamar ${noKamar} berhasil diselaraskan.`);
                     writeLog('DB_SYNC_OK', `Data kamar ${noKamar} berhasil disimpan.`);
+                } else {
+                    showToast('Gagal Menyimpan', response.message, 'error');
                 }
             } catch(err) {
                 showToast('Koneksi Lemah', 'Penyimpanan terganggu.', 'error');
             }
         });
 
-        // ADMIN MANAGEMENT MODALS (SUPERADMIN)
         const adminModal = document.getElementById('admin-modal'), adminForm = document.getElementById('admin-form');
 
         function openAddAdminModal() {
-            document.getElementById('admin-modal-title').textContent = "Tambah Akun Admin";
+            document.getElementById('admin-modal-title').textContent = "Tambah Akun Pemilik Kos";
             document.getElementById('admin-modal-username').disabled = false;
             adminForm.reset();
-            buildRoomsCheckboxList([]);
             showModal(adminModal);
         }
 
@@ -1102,31 +1089,9 @@
             document.getElementById('admin-modal-username').disabled = true;
             document.getElementById('admin-modal-password').value = admin.password;
             document.getElementById('admin-modal-role').value = admin.role;
+            document.getElementById('admin-modal-limit').value = admin.batasKamar || 5;
             
-            const checkedRooms = admin.kamarDikelola ? admin.kamarDikelola.split(',').map(s => s.trim()) : [];
-            buildRoomsCheckboxList(checkedRooms);
             showModal(adminModal);
-        }
-
-        function buildRoomsCheckboxList(checkedRooms) {
-            const container = document.getElementById('rooms-checkbox-list');
-            container.innerHTML = '';
-            
-            if (roomsData.length === 0) {
-                container.innerHTML = `<span class="text-xs text-slate-400">Buat kamar terlebih dahulu.</span>`;
-                return;
-            }
-
-            roomsData.forEach(room => {
-                const isChecked = checkedRooms.includes(room.noKamar);
-                const wrapper = document.createElement('label');
-                wrapper.className = "flex items-center gap-3 text-xs font-semibold cursor-pointer text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-colors";
-                wrapper.innerHTML = `
-                    <input type="checkbox" name="assign-room" value="${room.noKamar}" ${isChecked ? 'checked' : ''} class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
-                    <span>Kamar ${room.noKamar} (${room.namaPenyewa || 'Kosong'})</span>
-                `;
-                container.appendChild(wrapper);
-            });
         }
 
         document.getElementById('open-add-admin-btn').addEventListener('click', openAddAdminModal);
@@ -1147,15 +1112,9 @@
             const username = document.getElementById('admin-modal-username').value.trim();
             const password = document.getElementById('admin-modal-password').value.trim();
             const role = document.getElementById('admin-modal-role').value;
-            
-            let kamarDikelola = 'all';
-            if (role !== 'Superadmin') {
-                const checkboxes = document.querySelectorAll('input[name="assign-room"]:checked');
-                const selected = Array.from(checkboxes).map(cb => cb.value);
-                kamarDikelola = selected.join(',');
-            }
+            const batasKamar = parseInt(document.getElementById('admin-modal-limit').value) || 5;
 
-            const adminData = { username, password, role, kamarDikelola };
+            const adminData = { username, password, role, kamarDikelola: 'all', batasKamar };
             hideModal(adminModal);
             showToast('Menyimpan Admin', 'Memproses kredensial baru...', 'warning');
 
@@ -1165,14 +1124,13 @@
                     const freshAdmins = await callBackend('getAdmins');
                     if (freshAdmins.success) adminsData = freshAdmins.admins;
                     renderAdmins();
-                    showToast('Sukses', `Konfigurasi admin "${username}" disimpan.`);
+                    showToast('Sukses', `Konfigurasi pemilik kos "${username}" disimpan.`);
                 }
             } catch(e) {
                 showToast('Gagal Menyimpan', 'Terjadi kesalahan sistem.', 'error');
             }
         });
 
-        // SECURE DELETE CONFIRMATION MODAL HANDLERS
         let deleteType = null; 
         let deleteId = null;
 
@@ -1234,11 +1192,10 @@
             deleteType = null; deleteId = null;
         });
 
-        // INIT CONSOLE & CONNECTION
         window.onload = function() {
             updateConnectionStatusUI();
-            writeLog('SYSTEM_INIT', 'Inisialisasi sistem otorisasi multi-role berhasil.');
-            writeLog('SECURITY_CHECK', 'Mode penjagaan berlapis Superadmin/Admin aktif.');
+            writeLog('SYSTEM_INIT', 'Inisialisasi sistem otorisasi komersial multi-tenant berhasil.');
+            writeLog('SECURITY_CHECK', 'Mode lisensi kuota kamar per pemilik kos aktif.');
         };
     </script>
 <script type="text/javascript">
